@@ -1,0 +1,13 @@
+<script language="javascript">
+var siteurl="{config siteurl}";//参数 
+var tempdir="{self tempdir}";
+var hempdir="{self hempdir}";
+var appdir="{self appdir}";
+var rewrite="{config rewrite}";
+var module="{self module}";
+var action="{self action}";
+var islogin="<!--{if is_array($this->member)}-->1<!--{else}-->0<!--{/if}-->";
+var paymenturl = '{echo Purl("?mod=member&act=capital&type=payment")}';
+</script>
+{style {self hempdir}css/common.css,{self appdir}control/control.css}
+{script {self appdir}function.js,{self appdir}jquery.js,{self appdir}utils.js,{self appdir}jquery.form.js,{self appdir}listtable.js,{self appdir}control/control.js,{self appdir}highcharts.js,{self hempdir}js/common.js,{self appdir}date/WdatePicker.js}

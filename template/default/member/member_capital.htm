@@ -1,0 +1,277 @@
+{template member_header}
+<div id="main">
+  
+  <div class="right">
+    <div class="opencard_main">
+      <!--{if $_GET['type']=='list'}-->
+      <div class="track_title"> <a href="{echo Purl("?mod=member&act=capital&type=list&method=main")}" class="{echo $_GET['method']=='main' ? 'menushow' : 'menu'}">综合统计</a> <a href="{echo Purl("?mod=member&act=capital&type=list&method=money")}" class="{echo $_GET['method']=='money' ? 'menushow' : 'menu'}">金币记录</a> <a href="{echo Purl("?mod=member&act=capital&type=list&method=shopmoney")}" class="{echo $_GET['method']=='shopmoney' ? 'menushow' : 'menu'}">金种子记录</a>
+      </div>
+      <!--{if $_GET['method']=='main'}-->
+      <div class="member_mian">
+        <form method="GET" action="">
+          <input type="hidden" name="mod" id="mod" value="{$_GET['mod']}" />
+          <input type="hidden" name="act" id="act" value="{$_GET['act']}" />
+          <input type="hidden" name="type" id="type" value="{$_GET['type']}" />
+          <input type="hidden" name="method" id="method" value="{$_GET['method']}" />
+          <div class="ex_find">
+            <div class="ex_text">查询内容</div>
+            <div class="log_input_box">
+              <input name="content" type="text" class="log_input" value="{$_GET[content]}"  placeholder="如：推荐奖，金币抢购等" />
+            </div>
+            <div class="ex_text">查询日期</div>
+            <div class="ex_time_box">{form('time',$this->time_str,'datas')}</div>
+            <div class="ex_button_box">
+              <input type="submit" id="button" value="查&nbsp;&nbsp;询" class="find_button" />
+            </div>
+          </div>
+        </form>
+        <div class="info_bg">
+          <div class="info_text">查询统计：总共有 <b class="text_red_line">{self pagetotal}</b> 条记录，收入总额 <b class="text_red_line">&yen;{self allmoney['inmoney']}</b>，支出总额 <b class="text_red_line">&yen;{self allmoney['outmoney']}</b>，收入总额 <b class="text_red_line">&yen;{self allmoney['margin']}</b></div>
+        </div>
+        <table class="sheet">
+          <tr>
+            <th>记录编号</th>
+            <th>记录说明</th>
+            <th>金币</th>
+            <th>金种子</th>
+            <th>合计</th>
+            <th>时间</th>
+          </tr>
+          <!--{loop $this->record $value}-->
+          <tr class="mybg">
+            <td>{$value['id']}</td>
+            <td>{$value['content']}</td>
+            <td class="red">{echo $value[1]['lognum'] ? $value[1]['lognum'] : "0.00"}</td>
+            <td class="red">{echo $value[3]['lognum'] ? $value[3]['lognum'] : "0.00"}</td>
+            <td class="red">{echo formatnum($value[1]['lognum']+$value[2]['lognum']+$value[3]['lognum']+$value[4]['lognum'])}</td>
+            <td>{echo formattime($value['addtime'],'Y-m-d H:i:s')}</td>
+          </tr>
+          <!--{/loop}-->
+        </table>
+        <!--{if !is_array($this->record)}-->
+        <div class="no_info"><span class="no_info_ico"></span>暂无任何记录</div>
+        <!--{/if}-->
+        <!--{if $this->newpage}-->
+        <div class="pages">{self newpage}</div>
+        <!--{/if}-->
+      </div>
+      <!--{/if}-->
+      <!--{if $_GET['method']=='money'||$_GET['method']=='regmoney'||$_GET['method']=='shopmoney'||$_GET['method']=='balance'}-->
+      <div class="member_mian">
+        <form method="GET" action="">
+          <input type="hidden" name="mod" id="mod" value="{$_GET['mod']}" />
+          <input type="hidden" name="act" id="act" value="{$_GET['act']}" />
+          <input type="hidden" name="type" id="type" value="{$_GET['type']}" />
+          <input type="hidden" name="method" id="method" value="{$_GET['method']}" />
+          <div class="ex_find">
+            <div class="ex_text">查询内容</div>
+            <div class="log_input_box">
+              <input name="content" type="text" class="log_input" value="{$_GET[content]}"  placeholder="如：推荐奖，金币抢购等" />
+            </div>
+            <div class="ex_text">查询日期</div>
+            <div class="ex_time_box">{form('time',$this->t['str'],'datas')}</div>
+            <div class="ex_button_box">
+              <input type="submit" id="button" value="查&nbsp;&nbsp;询" class="find_button" />
+            </div>
+          </div>
+        </form>
+        <div class="info_bg">
+          <div class="info_text">查询统计：总共有 <b class="text_red_line">{self pagetotal}</b> 条记录，收入 <b class="text_red_line">&yen;{self allmoney['inmoney']}</b>，支出 <b class="text_red_line">&yen;{self allmoney['outmoney']}</b></div>
+        </div>
+        <!--{if $this->categories}-->
+        <div id="container"></div>
+        <!--{/if}-->
+        <table class="sheet">
+          <tr>
+            <th>记录编号</th>
+            <th>记录说明</th>
+            <th>金额变动</th>
+            <th>当时余额</th>
+            <th>产生时间</th>
+          </tr>
+          <!--{loop $this->record $value}-->
+          <tr class="mybg">
+            <td>{$value['id']}</td>
+            <td>{$value['content']}</td>
+            <td class="red">{$value['lognum']}</td>
+            <td class="red">&yen;{$value['balance']}</td>
+            <td>{echo formattime($value['addtime'],'Y-m-d H:i:s')}</td>
+          </tr>
+          <!--{/loop}-->
+        </table>
+        <!--{if !is_array($this->record)}-->
+        <div class="no_info"><span class="no_info_ico"></span>暂无任何记录</div>
+        <!--{/if}-->
+        <!--{if $this->newpage}-->
+        <div class="pages">{self newpage}</div>
+        <!--{/if}-->
+      </div>
+      <!--{if $this->categories}-->
+<script language="javascript"> 
+$(function(){
+   chart('container','line',[{self categories}],[{name:'收入',data:[{self inmoney}]},{name:'支出',data:[{self outmoney}]}]);	   
+});
+</script>
+      <!--{/if}-->
+      <!--{/if}-->
+      <!--{/if}-->
+ 
+      <!--{if $_GET['type']=='transfer'}-->
+      <div class="opencard_main opencard_main2">
+      <div class="opencards_title">
+        <div class="opencards_title_b">金币转账</div>
+        <div class="opencards_title_a">提示：<span class="text_x_12px">*</span> 为必填项目！</div>
+      </div>
+      <div class="order-prompt order-promptbommton"><span></span>请务必确认会员金额以及收款人后转账，以免造成资金损失。</div>
+      <div class="opencard_box">
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 现金余额</div>
+          <div class="opencard_input_box"><span class="dis-input">{member money} </span><span class="tips" id="moneytip"></span></div>
+        </div>
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 要转账给</div>
+          <div class="opencard_input_box">
+            <input name="username" id="username" class="myinput" type="text" placeholder="用户名/电子邮箱/绑定手机" onblur="checkusername()"/>
+            <input name="userphone" id="userphone" value="{echo substr($this->member['userphone'],0,3)}****{echo substr($this->member['userphone'],7,4)}" type="hidden" />
+            <span class="tips" id="usernametip"></span></div>
+        </div>
+      </div>
+      <div class="opencard_h">
+        <div class="opencard_text"><span class="text_x_12px">*</span> 转账金额</div>
+        <div class="opencard_input_box">
+          <input name="howmoney" id="howmoney" class="myinput" type="text" onblur="checkmoney()"/>
+          <input type="hidden" name="mymoney" id="mymoney" value="{member money}" />
+          <span class="tips" id="howmoneytip"></span></div>
+      </div>
+      <div class="opencard_button_box">{form('opcardbutton','确认转账','submit')}<span class="tips" id="cashtip"></span></div>
+    </div>
+    </div>
+    <!--{/if}-->
+
+    <!--{if $_GET['type']=='myatm'}-->
+<script language="javascript">
+var atmscale="{config atmscale}";
+var atmmoney={config atmmoney};
+</script>
+    <div class="track_title"> <a class="{echo $_GET['method']==''?'menushow':'menu'}" href="{echo Purl("?mod=member&act=capital&type=myatm")}">申请提现</a> <a class="{echo $_GET['method']=='record'?'menushow':'menu'}" href="{echo Purl("?mod=member&act=capital&type=myatm&method=record")}">提现记录</a> </div>
+    <!--{if $_GET['method']==''}-->
+    <div class="member_mian">
+    <div class="to-cash" id="to-cash">
+      <div class="to-cash-tit"><span>选择提现银行</span>
+        <!--{eval $count = 5-count($this->bank);}-->
+        <div class="add-banks {if $count>0}showbanks{/if}" id="banks"> <a href="javascript:addbank();">添加银行卡</a>（还可添<a id="bankcount">{$count}</a>个） </div>
+      </div>
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tbody>
+          <tr>
+            <th>银行名称</th>
+            <th>开户名</th>
+            <th>银行卡号</th>
+            <th>开户地址</th>
+            <th>操作</th>
+          </tr>
+        </tbody>
+        <tbody id="hasSetBanks" class="hasbanks {if !is_array($this->bank)}showbanks{/if}">
+          <tr>
+            <td colspan="15" align="center">您还没有设置用于提现的银行！<a href="javascript:addbank();">添加银行卡</a></td>
+          </tr>
+        </tbody>
+        <input name="atmbank" id="atmbank" type="hidden" value="" />
+        <tbody id="banklist">
+          <!--{loop $this->bank $value}-->
+          <!--{eval $value['bankimages'] = bankimages($value['bankname']);}-->
+          <tr>
+            <td onclick="changebank('{$value[id]}')"><input name="bankid" id="bankid_{$value['id']}" type="radio" value="{$value['id']}" />
+              <img src="{self hempdir}images/chinabank0/{$value['bankimages']}"/> {$value['bankname']}
+              </li></td>
+            <td>{$value['truename']}</td>
+            <td>{$value['bankcard']}</td>
+            <td>{$value['bankadd']}</td>
+            <td><a href="javascript:editbank('{$value['id']}');">编辑</a> <a href="javascript:delbank('{$value['id']}');">删除</a></td>
+          </tr>
+          <!--{/loop}-->
+        </tbody>
+      </table>
+    </div>
+    <div class="to-cash">
+      <div class="to-cash-tit"><span>确认提现金额</span></div>
+      <div class="opencard_box" style="margin-top:20px;">
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 现金余额</div>
+          <div class="opencard_input_box"><span class="dis-input">{member money}</span><span class="tips" id="moneytip"></span></div>
+        </div>
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 提现金额</div>
+          <div class="opencard_input_box">
+            <input name="howmoney" id="howmoney" class="myinput" type="text" onblur="checkmoney()"/>
+            <input type="hidden" name="mymoney" id="mymoney" value="{member money}" />
+            <span class="tips" id="howmoneytip"></span></div>
+        </div>
+      </div>
+      <div class="opencard_button_box">{form('opcardbutton','确认提现','submit')}<span class="tips" id="cashtip"></span></div>
+    </div>
+    </div>
+    <!--{/if}-->
+    <!--{if $_GET['method']=='record'}-->
+    <div class="member_mian">
+      <form method="GET" action="">
+        <input type="hidden" name="mod" id="mod" value="{$_GET['mod']}" />
+        <input type="hidden" name="act" id="act" value="{$_GET['act']}" />
+        <input type="hidden" name="type" id="type" value="{$_GET['type']}" />
+        <input type="hidden" name="method" id="method" value="{$_GET['method']}" />
+        <div class="ex_find">
+          <div class="ex_text">流水号</div>
+          <div class="log_input_box">
+            <input name="orderid" type="text" class="log_input" value="{$_GET[orderid]}"  />
+          </div>
+          <div class="ex_text">查询日期</div>
+          <div class="ex_time_box">{form('time',$this->time_str,'datas')}</div>
+          <div class="ex_button_box">
+            <input type="submit" id="button" value="查&nbsp;&nbsp;询" class="find_button" />
+          </div>
+        </div>
+      </form>
+      <div class="info_bg">
+        <div class="info_text">查询统计：总共有 <b class="text_red_line">{self pagetotal}</b> 条记录，已支付 <b class="text_red_line">&yen;{self yespay}</b>，未支付 <b class="text_red_line">&yen;{self nopay}</b></div>
+      </div>
+      <table class="sheet">
+        <tr>
+          <th>提现编号</th>
+          <th>流水号</th>
+          <th>提现金额</th>
+          <th>实收金额</th>
+          <th>开户银行</th>
+          <th>银行户名</th>
+          <th>银行卡号</th>
+          <th>目前状态</th>
+          <th>申请时间</th>
+        </tr>
+        <!--{loop $this->record $value}-->
+        <tbody id="payorder_{$value['orderid']}">
+          <tr class="mybg">
+            <td>{$value['id']}</td>
+            <td>{$value['orderid']}</td>
+            <td class="red">&yen;{$value['lognum']}</td>
+            <td align="red">&yen;{echo formatnum($value['lognum']-($value['lognum']*(float)config::get("atmscale")/100))}</td>
+            <td title="{$value['bankadd']}{$value['bankname']}">{$value['bankname']}</td>
+            <td>{$value['truename']}</td>
+            <td>{echo substr($value['bankcard'],0,4)."***".substr($value['bankcard'],-4,4)}</td>
+            <td>{echo atmcheck($value['checked'])}</td>
+            <td>{echo formattime($value['addtime'])}</td>
+          </tr>
+        </tbody>
+        <!--{/loop}-->
+      </table>
+      <!--{if !is_array($this->record)}-->
+      <div class="no_info"><span class="no_info_ico"></span>暂无任何记录</div>
+      <!--{/if}-->
+      <!--{if $this->newpage}-->
+      <div class="pages">{self newpage}</div>
+      <!--{/if}-->
+    </div>
+    <!--{/if}-->
+    <!--{/if}-->
+  </div>
+</div>
+</div>
+{template member_footer}

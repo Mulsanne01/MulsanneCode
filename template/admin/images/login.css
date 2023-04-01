@@ -1,0 +1,135 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	margin:0;
+	padding:0;
+}
+body {
+	font-size:12px;
+	font-family:arial, helvetica, clean, sans-serif;
+	background:#EEF9FF;
+}
+fieldset, img {
+	border:0;
+}
+a{
+	color:#00529b;
+	text-decoration:none;
+}
+a:hover{
+	color:#194bdc;
+	text-decoration:underline;
+}
+ul,li{
+	list-style:none;
+	}
+	
+#top{
+	width:100%;
+	height:90px;
+	background:url(top_bg.jpg);
+	margin:0 auto;
+	overflow:hidden;
+	}
+	
+#top .logo{
+	width:700px;
+	height:90px;
+	margin:0 auto;
+	background:url(logo_bg.jpg);
+}
+#top .logo a{
+	display:block;
+	width:700px;
+	height:90px;
+	text-indent:-9999px;
+}
+#con{
+	width:100%;
+	height:430px;
+	background:url(con_bg.jpg);
+	margin:0 auto;
+	overflow:hidden;
+}
+#con .login{
+	width:280px;
+	height:240px;
+	margin:20px auto 0 auto;
+	background:url(login_bg.jpg);
+	padding-left:420px;
+	padding-top:100px;
+	line-height:20px;
+}
+#con .login p{
+	margin-bottom:10px;
+	font-size:12px;
+	font-weight:bolder;
+	color:#09558f;
+}
+
+#con .login label{
+	display:block;
+	float:left;
+}
+
+#con .login span{
+	display:block;
+	width:189px;
+	height:22px;
+	line-height:20px;
+	background:url(input_bg.jpg);
+	padding:2px 0 0 5px;
+}
+
+#con .login span input{
+	border:0;
+	width:126px;
+	height:20px;
+	line-height:20px;
+}
+
+#con .login span.code{
+	display:block;
+	width:119px;
+	height:22px;
+	line-height:20px;
+	background:url(input_bg2.jpg);
+	padding:2px 0 0 5px;
+	float:left;
+}
+#con .login span.code input{
+	border:0;
+	width:65px;
+	height:20px;
+	line-height:20px;
+	font-weight:bolder;
+	letter-spacing:1px;
+}
+#checkcode{
+	cursor:pointer;
+	margin-left:10px;
+}
+#con .login em{
+	display:block;
+	margin:10px 0 0 15px;
+	font-style:normal;
+	float:left;
+	width:80px;
+}
+.sublogin{
+	float:left; 
+	margin-left:10px;
+	width:84px;
+	height:38px;
+	background:url(login.jpg);
+	border:0;
+	font-size:0;
+	cursor:pointer;
+}
+#con .foot{
+	width:700px;
+	margin:26px auto 0 auto;
+	text-align:center;
+	line-height:20px;
+	color:#09558f;
+}

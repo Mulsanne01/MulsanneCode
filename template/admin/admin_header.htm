@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Language" content="utf-8" />
+<title>后台管理中心</title>
+<script language="javascript">
+var siteurl="{config siteurl}",tempdir="{self tempdir}",hempdir="{self hempdir}",appdir="{self appdir}",rewrite="{config rewrite}",module="{self module}",action="{self action}",re="{$_GET['re']}";//初始变量
+</script>
+<!--{eval
+   $admin_menu_top = admin_menu_top();
+   $admin_menu_left = admin_menu_left($_GET['act']);
+   $ActName = $admin_menu_top[$_GET['act']];
+   $getName = str_replace("-no","",$admin_menu_left[$_GET['get']]);
+   $nav = $ActName." >> ".$getName;
+   $admin_menu_small = admin_menu_small($_GET['act'],$_GET['get']);   
+}-->
+{style {self tempdir}images/admin.css,{self appdir}control/control.css,{self appdir}kindeditor/themes/default/default.css}
+{script {self appdir}jquery.js,{self appdir}function.js,{self appdir}areadata.js,{self appdir}myarea.js,{self appdir}utils.js,{self appdir}listtable.js,{self appdir}control/control.js,{self appdir}highcharts.js,{self appdir}jquery.form.js,{self appdir}editor/kindeditor.js,{self appdir}editor/lang/cn.js,{self appdir}date/WdatePicker.js,{self appdir}swfupload/swfupload.js,{self appdir}swfupload/multiupload.js,{self tempdir}images/admin.js}
+</head>
+<body>
+<div id="top">
+  <div style="background:#1b4070; width:100%; height:auto; display:block;">
+    <div id="logo"><img src="{config siteurl}template/admin/images/logo.gif" /></div>
+    <div id="nav">
+      <p><span style="float:right; font-size:12px;">您好，<strong>{manager username} <font color="#FF0000">({manager groupname})</font>！</strong> [<a href="{url admin_logout}">退出</a>] </span></p>
+      <div class="nav">
+      <!--{loop $admin_menu_top $key=>$val}-->
+      <!--{if $this->manager_class->gt_purview($key)}-->
+       <a href="{echo Purl('admin_'.$key)}" {if $key==$this->action}class="on"{/if}>{$val}</a> 
+      <!--{/if}-->
+      <!--{/loop}-->
+       <a href="{config siteurl}" class="home" target="_blank">会员平台</a> 
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="clear"></div>
+</div>
+<div id="position">当前位置：{$nav}</div>
+<div id="main">
+  <div id="left">
+    <div id="menu">
+      <dl>
+        <dt>{echo $admin_menu_top[$this->action];}</dt>
+      <!--{loop $admin_menu_left $key=>$val}-->
+       <!--{if $this->manager_class->rn_purview($this->module,$this->action,$key)}-->
+         {eval $class = $_GET['get']==$key ? 'class="on"' : ''; }
+         <dd {$class}><a href="{echo Purl("?mod=admin&act=".$this->action."&get=".$key)}" {$class}>{$val}</a></dd>
+       <!--{/if}-->
+      <!--{/loop}-->
+      </dl>
+    </div>
+  </div>
+  <div id="right">
+    <div class="right" style="width:auto;overflow-x:hidden;overflow-y:auto;">
+        <div class="tags">
+          <div id="tagstitle"> 
+            <!--{loop $admin_menu_small $key=>$val}-->
+            <!--{if !strstr($val,"-no")}-->
+             <a href="{echo Purl("?mod=admin&act=".$this->action."&get=".$_GET['get']."&re=".$key)}" {if $_GET['re']==$key}class="hover"{/if}>{$val}</a>
+            <!--{/if}-->
+            <!--{/loop}-->
+            <!--{if $_GET['re']=='edit'}-->
+            <a href="javascript:;" class="hover">{echo str_replace("-no","",$admin_menu_small['edit']);}</a>
+            <!--{/if}-->
+          </div>
+          <div id="tagscontent" >
+            <div id="con_one_1">
+              <div class="table_td">
+              

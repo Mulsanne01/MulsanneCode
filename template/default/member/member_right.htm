@@ -1,0 +1,33 @@
+  <div class="myls-right">
+    <div class="myls-rwarp myls-rwarptop">
+      <div class="myls-title">
+        <h4>我的账户</h4>
+      </div>
+      <div class="myls-account"> <span class="myls-accountbg"></span>
+        <p><a href="javascript:;">玩家编号</a>：{member username}</p>
+        <p class="line"><a href="javascript:;">会员级别</a>：{member groupname}</p>
+        {if $this->member['service']}<p><a href="javascript:;">服务权限</a>：报单中心</p>{/if}
+        <p><a href="{url member_record}">推荐会员</a>：<span>{member renumber}</span>个</p>
+        <p><a href="{url member_capital}">账户金币</a>：<span>&yen;&nbsp;{member money}</span></p>
+        <!--<p><a href="{echo Purl("?mod=member&act=capital&type=shopmoney")}">账户积分</a>：<span>&yen;&nbsp;{member shopmoney}</span></p>-->
+      </div>
+      <div class="myls-account-but">
+        <a href="{url member}" class="abut02 logout"><span>会员中心</span></a>
+        <a href="{url member_logout}" class="abut02 logout"><span>退出系统</span></a>
+        <div style="clear:both;"></div>
+      </div>
+    </div>
+    <div class="myls-rwarp">
+      <dl class="myls-rqa">
+        <dt><a href="{echo Purl("?mod=news&act=main&typeid=1")}">玩家公告</a></dt>
+        <dd>
+         <ul>
+          <!--{loop $this->getnews(1,10,28) $value}-->
+          <li><a href="{$value['url']}">{$value['title']}</a></li>
+          <!--{/loop}-->
+         </ul>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <div class="clr"></div>

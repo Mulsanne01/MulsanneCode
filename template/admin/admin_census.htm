@@ -1,0 +1,427 @@
+{template admin_header}
+<!--{if $_GET['get']=='money'}-->
+<!--{if $_GET['re']=='list'}-->
+<div class="headbar clearfix">
+  <ul class="tab">
+    <li {if $_GET['type']==''}class="selected"{/if}><a href="{echo Purl(adminpre())}">综合统计</a></li>
+    <li {if $_GET['type']=='1'}class="selected"{/if}><a href="{echo Purl(adminpre().'&type=1')}">金币记录</a></li>
+    <li {if $_GET['type']=='3'}class="selected"{/if}><a href="{echo Purl(adminpre().'&type=3')}">金种子记录</a></li>
+    <div class="tabright">
+      <form method="get" action="">
+        <input type="hidden" name="mod" id="mod" value="{$_GET['mod']}" />
+        <input type="hidden" name="act" id="act" value="{$_GET['act']}" />
+        <input type="hidden" name="get" id="get" value="{$_GET['get']}" />
+        <input type="hidden" name="re" id="re" value="{$_GET['re']}" />
+        <input type="hidden" name="type" id="type" value="{$_GET['type']}" />
+        会员名：
+        <input type="text" name="username" id="username" value="{$_GET['username']}" class='skey w120'/>
+        时间段：{form('time',$this->t['str'],'datas')}
+        <input type="submit" id="button" value="立即搜索" class='button'>
+      </form>
+    </div>
+    <div style="clear:both;"></div>
+  </ul>
+</div>
+<!--{if $_GET['type']}-->
+<table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+  <thead>
+    <tr>
+      <th align="center">记录编号</th>
+      <th align="center">记录说明</th>
+      <th align="center">金额</th>
+      <th align="center">余额</th>
+      <th align="center">会员</th>
+      <th align="center">时间</th>
+    </tr>
+  </thead>
+  <!--{if !is_array($this->record)}-->
+  <tbody>
+    <tr class="trhover">
+      <td align="center" colspan="7">暂无数据</td>
+    </tr>
+  </tbody>
+  <!--{/if}-->
+  <!--{loop $this->record $value}-->
+  <tbody>
+    <tr class="trhover">
+      <td align="center">{$value[id]}</td>
+      <td align="center">{$value['content']}</td>
+      <td align="center"><span class="red">{$value['lognum']}</span></td>
+      <td align="center"><span class="red">{$value['balance']}</span></td>
+      <td align="center">{echo $this->mysql->value($this->pre."user","username","uid=".$value['uid'])}</td>
+      <td align="center">{echo formattime($value['addtime'])}</td>
+    </tr>
+  </tbody>
+  <!--{/loop}-->
+</table>
+<!--{else}-->
+<table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+  <thead>
+    <tr>
+      <th align="center">记录编号</th>
+      <th align="center">记录说明</th>
+      <th align="center">金币</th>
+      <th align="center">金种子</th>
+      <th align="center">合计</th>
+      <th align="center">会员</th>
+      <th align="center">时间</th>
+    </tr>
+  </thead>
+  <!--{if !is_array($this->record)}-->
+  <tbody>
+    <tr class="trhover">
+      <td align="center" colspan="7">暂无数据</td>
+    </tr>
+  </tbody>
+  <!--{/if}-->
+  <!--{loop $this->record $value}-->
+  <tbody>
+    <tr class="trhover">
+      <td align="center">{$value['id']}</td>
+      <td align="center">{$value['content']}</td>
+      <td align="center"><span class="red">{echo $value[1]['lognum'] ? $value[1]['lognum'] : "0.00"}</span></td>
+      <td align="center"><span class="red">{echo $value[3]['lognum'] ? $value[3]['lognum'] : "0.00"}</span></td>
+      <td align="center"><span class="red">{echo formatnum($value[1]['lognum']+$value[2]['lognum']+$value[3]['lognum']+$value[4]['lognum'])}</span></td>
+      <td align="center">{echo $this->mysql->value($this->pre."user","username","uid=".$value['uid'])}</td>
+      <td align="center">{echo formattime($value['addtime'],'Y-m-d H:i:s')}</td>
+    </tr>
+  </tbody>
+  <!--{/loop}-->
+</table>
+<!--{/if}-->
+<div class="blank20"></div>
+<div class="page"><span>{self pagetotal}条记录/{eval echo $_GET['page'] ? $_GET['page'] : 1 }页</span>{self showpage}</div>
+<div class="blank20"></div>
+<!--{/if}-->
+<!--{if $_GET['re']=='chart'}-->
+<div class="headbar clearfix">
+  <ul class="tab">
+    <div class="tabright">
+      <form method="get" action="">
+        <input type="hidden" name="mod" id="mod" value="{$_GET['mod']}" />
+        <input type="hidden" name="act" id="act" value="{$_GET['act']}" />
+        <input type="hidden" name="get" id="get" value="{$_GET['get']}" />
+        <input type="hidden" name="re" id="re" value="{$_GET['re']}" />
+        <input type="hidden" name="type" id="type" value="{$_GET['type']}" />
+        时间段：{form('time',$this->t['str'],'datas')}
+        <input type="submit" id="button" value="立即搜索" class='button'>
+      </form>
+    </div>
+    <div style="clear:both;"></div>
+  </ul>
+</div>
+<div id="index_diagram">
+  <div id="chartspie" style="width:49%;float:left;"></div>
+  <div id="chartscolumn" style="width:49%;float:left;"></div>
+</div>
+<script language="javascript"> 
+$(function() { 
+   chart('chartscolumn',"column",['综合统计'],[{name:'收入',data:[{self allmoney[buymoney]}]},{name:'支出',data:[{self allmoney[outmoney]}]},{name:'利润',data: [{echo $this->allmoney[buymoney]-$this->allmoney[outmoney];}]}]);
+   chart('chartspie',"pie",['综合统计'],[['推荐奖',{self allmoney[refereemoney]}],['分红奖',{self allmoney[money]}],['领导奖',{self allmoney[leadmoney]}],['报单奖',{self allmoney[regmoney]}]]);
+});
+</script>
+<!--{/if}-->
+<!--{if $_GET['re']=='outchart'}-->
+<div class="headbar clearfix">
+  <ul class="tab">
+    <li {if $_GET['type']==''}class="selected"{/if}><a href="{echo preg_replace('#&type=(\d+)#','',geturl())}">曲线走势图</a></li>
+    <li {if $_GET['type']=='1'}class="selected"{/if}><a href="{echo preg_replace('#&type=(\d+)#','',geturl()).'&type=1'}" >柱状走势图</a></li>
+    <div class="tabright">
+      <form method="get" action="">
+        <input type="hidden" name="mod" id="mod" value="{$_GET['mod']}" />
+        <input type="hidden" name="act" id="act" value="{$_GET['act']}" />
+        <input type="hidden" name="get" id="get" value="{$_GET['get']}" />
+        <input type="hidden" name="re" id="re" value="{$_GET['re']}" />
+        <input type="hidden" name="type" id="type" value="{$_GET['type']}" />
+        时间段：{form('time',$this->t['str'],'datas')}
+        <input type="submit" id="button" value="立即搜索" class='button'>
+      </form>
+    </div>
+    <div style="clear:both;"></div>
+  </ul>
+</div>
+<div id="index_pool">
+  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+      <th align="center">推荐奖</th>
+      <th align="center">分红奖</th>
+      <th align="center">领导奖</th>
+      <th align="center">报单奖</th>
+      <th align="center">合计</th>
+    </tr>
+    <tr>
+      <td align="center"><span class="red">&yen;{self allmoney['refereemoney']}</span></td>
+      <td align="center"><span class="red">&yen;{self allmoney['money']}</span></td>
+      <td align="center"><span class="red">&yen;{self allmoney['leadmoney']}</span></td>
+      <td align="center"><span class="red">&yen;{self allmoney['regmoney']}</span></td>
+      <td align="center"><span class="red">&yen;{self allmoney['outmoney']}</span></td>
+    </tr>
+  </table>
+</div>
+<br />
+<div id="container"></div>
+<script language="javascript"> 
+$(function() {
+   chart('container',"{echo $_GET['type']=='1' ? 'column' : 'line'}",[{self categories}],[{name:'推荐奖',data:[{self refereemoney}]},{name:'分红奖',data:[{self money}]},{name:'领导奖',data:[{self leadmoney}]},{name:'报单奖',data:[{self regmoney}]}]);            
+});
+</script>
+<!--{/if}-->
+<!--{if $_GET['re']=='inchart'}-->
+<div class="headbar clearfix">
+  <ul class="tab">
+    <li {if $_GET['type']==''}class="selected"{/if}><a href="{echo preg_replace('#&type=(\d+)#','',geturl())}">曲线走势图</a></li>
+    <li {if $_GET['type']=='1'}class="selected"{/if}><a href="{echo preg_replace('#&type=(\d+)#','',geturl()).'&type=1'}" >柱状走势图</a></li>
+    <div class="tabright">
+      <form method="get" action="">
+        <input type="hidden" name="mod" id="mod" value="{$_GET['mod']}" />
+        <input type="hidden" name="act" id="act" value="{$_GET['act']}" />
+        <input type="hidden" name="get" id="get" value="{$_GET['get']}" />
+        <input type="hidden" name="re" id="re" value="{$_GET['re']}" />
+        <input type="hidden" name="type" id="type" value="{$_GET['type']}" />
+        时间段：{form('time',$this->t['str'],'datas')}
+        <input type="submit" id="button" value="立即搜索" class='button'>
+      </form>
+    </div>
+    <div style="clear:both;"></div>
+  </ul>
+</div>
+<div id="index_pool">
+  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+      <th align="center">推荐奖</th>
+      <th align="center">分红奖</th>
+      <th align="center">领导奖</th>
+      <th align="center">报单奖</th>
+      <th align="center">营业总额</th>
+      <th align="center">拨出总额</th>
+      <th align="center">利润总额</th>
+    </tr>
+    <tr>
+      <td align="center"><span class="red">&yen;{self allmoney['refereemoney']}</span></td>
+      <td align="center"><span class="red">&yen;{self allmoney['money']}</span></td>
+      <td align="center"><span class="red">&yen;{self allmoney['leadmoney']}</span></td>
+      <td align="center"><span class="red">&yen;{self allmoney['regmoney']}</span></td>
+      <td align="center"><span class="red">&yen;{self allmoney['buymoney']}</span></td>
+      <td align="center"><span class="red">&yen;{self allmoney['outmoney']}</span></td>
+      <td align="center"><span class="red">&yen;{echo formatnum($this->allmoney['buymoney']-$this->allmoney['outmoney'])}</span></td>
+    </tr>
+  </table>
+</div>
+<br />
+<div id="container"></div>
+<script language="javascript"> 
+$(function(){
+   chart('container',"{echo $_GET['type']=='1' ? 'column' : 'line'}",[{self categories}],[{name:'拨出奖金',data:[{self outmoney}]},{name:'业绩收入',data:[{self buymoney}]}]);	   
+});
+</script>
+<!--{/if}-->
+<!--{/if}-->
+<!--{if $_GET['get']=='atmlog'}-->
+<!--{if $_GET['re']=='list'}-->
+<div class="headbar clearfix">
+  <ul class="tab">
+    <li {if $_GET['type']==''}class="selected"{/if}><a href="{echo Purl(adminpre())}">全部记录</a></li>
+    <li {if $_GET['type']=='1'}class="selected"{/if}><a href="{echo Purl(adminpre().'&type=1')}">暂未汇款</a></li>
+    <li {if $_GET['type']=='2'}class="selected"{/if}><a href="{echo Purl(adminpre().'&type=2')}">已经汇款</a></li>
+    <div class="tabright">
+      <form method="get" action="">
+        <input type="hidden" name="mod" id="mod" value="{$_GET['mod']}" />
+        <input type="hidden" name="act" id="act" value="{$_GET['act']}" />
+        <input type="hidden" name="get" id="get" value="{$_GET['get']}" />
+        <input type="hidden" name="re" id="re" value="{$_GET['re']}" />
+        <input type="hidden" name="type" id="type" value="{$_GET['type']}" />
+        玩家编号：
+        <input type="text" name="username" id="username" value="{$_GET['username']}" class='skey w120'/>
+        时间段：{form('time',$this->t['str'],'datas')}
+        <input type="submit" id="button" value="立即搜索" class='button'>
+      </form>
+    </div>
+    <div style="clear:both;"></div>
+  </ul>
+</div>
+<form method="post" name="atmpost" id="atmpost" action="" onsubmit="return atmsubmit();">
+  <table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+    <thead>
+      <tr>
+        <th width="60px"><input type="checkbox" id="chkall" name="chkall" onclick="checkall(this.form, 'id')"></th>
+        <th align="center">序号</th>
+        <th align="center">提现金额</th>
+        <th align="center">实付金额</th>
+        <th align="center">申请会员</th>
+        <th align="center">收款信息</th>
+        <th align="center">申请时间</th>
+        <th align="center">操作</th>
+      </tr>
+    </thead>
+    <!--{loop $this->atmlog $value}-->
+    <!--{eval $user = $this->mysql->select_one("select * from ".$this->pre."user where uid=".$value['uid']);}-->
+    <tbody>
+      <tr class="trhover">
+        <td align="center" ><input type="checkbox" name="id[]" value="{$value[id]}"></td>
+        <td align="center">{$value[id]}</td>
+        <td align="center"><span class="red">{echo formatnum($value['lognum'])}</span></td>
+        <td align="center"><span class="red">{echo formatnum($value['lognum']-($value['lognum']*(float)config::get("atmscale")/100))}</span></td>
+        <td align="left" style="padding-left:10px;">用户：{$user['username']}<br />
+          电话：{$user['userphone']}</td>
+        <td align="left" style="padding-left:10px;"> 开户名：{$value['truename']}<br />
+          开户行：{$value['bankname']}<br />
+          银行卡号：{$value['bankcard']} </td>
+        <td align="center">{echo formattime($value['addtime'])}</td>
+        <td align="center" width="100"> 
+          {if $value['checked']}
+          已经付款
+          {else} 
+          <a href="javascript:listTable._toggle('atmed_{$value[id]}','checked','{$value[id]}','确认付款');" id="atmed_{$value['id']}" value="{$value['checked']}">确认付款</a>
+          {/if} 
+        </td>
+      </tr>
+    </tbody>
+    <!--{/loop}-->
+  </table>
+  <div class="blank20"></div>
+  {form('button','批量确认付款','submit','','class=\'button\'')}
+</form>
+<div class="page"><span>{self pagetotal}条记录/{eval echo $_GET['page'] ? $_GET['page'] : 1 }页</span>{self showpage}</div>
+<div class="blank20"></div>
+<!--{/if}-->
+<!--{if $_GET['re']=='chart'}-->
+<div class="headbar clearfix">
+  <ul class="tab">
+    <li {if $_GET['type']==''}class="selected"{/if}><a href="{echo preg_replace('#&type=(\d+)#','',geturl())}">曲线走势图</a></li>
+    <li {if $_GET['type']=='1'}class="selected"{/if}><a href="{echo preg_replace('#&type=(\d+)#','',geturl()).'&type=1'}" >柱状走势图</a></li>
+    <div class="tabright">
+      <form method="get" action="">
+        <input type="hidden" name="mod" id="mod" value="{$_GET['mod']}" />
+        <input type="hidden" name="act" id="act" value="{$_GET['act']}" />
+        <input type="hidden" name="get" id="get" value="{$_GET['get']}" />
+        <input type="hidden" name="re" id="re" value="{$_GET['re']}" />
+        <input type="hidden" name="type" id="type" value="{$_GET['type']}" />
+        时间段：{form('time',$this->t['str'],'datas')}
+        <input type="submit" id="button" value="立即搜索" class='button'>
+      </form>
+    </div>
+    <div style="clear:both;"></div>
+  </ul>
+</div>
+<div id="index_pool">
+  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+      <th align="center">已经汇款</th>
+      <th align="center">暂未汇款</th>
+      <th align="center">全部提现</th>
+    </tr>
+    <tr>
+      <td align="center"><span class="red">&yen;{self allmoney['atmmoneyed']}</span></td>
+      <td align="center"><span class="red">&yen;{self allmoney['atmmoneyno']}</span></td>
+      <td align="center"><span class="red">&yen;{self allmoney['atmmoney']}</span></td>
+    </tr>
+  </table>
+</div>
+<br />
+<div id="container"></div>
+<script language="javascript"> 
+$(function() {
+   chart('container',"{echo $_GET['type']=='1' ? 'column' : 'line'}",[{self categories}],[{name:'已经汇款',data:[{self atmmoneyed}]},{name:'暂未汇款',data:[{self atmmoneyno}]},{name:'全部提现',data: [{self atmmoney}]}]);
+});
+</script>
+<!--{/if}-->
+<!--{/if}-->
+<!--{if $_GET['get']=='payorder'}-->
+<!--{if $_GET['re']=='list'}-->
+<div class="headbar clearfix">
+  <ul class="tab">
+    <li {if $_GET['type']==''}class="selected"{/if}><a href="{echo Purl(adminpre())}">全部记录</a></li>
+    <li {if $_GET['type']=='1'}class="selected"{/if}><a href="{echo Purl(adminpre().'&type=1')}">暂未汇款</a></li>
+    <li {if $_GET['type']=='2'}class="selected"{/if}><a href="{echo Purl(adminpre().'&type=2')}">已经汇款</a></li>
+    <li {if $_GET['type']=='3'}class="selected"{/if}><a href="{echo Purl(adminpre().'&type=3')}">交易成功</a></li>
+    <div class="tabright">
+      <form method="get" action="">
+        <input type="hidden" name="mod" id="mod" value="{$_GET['mod']}" />
+        <input type="hidden" name="act" id="act" value="{$_GET['act']}" />
+        <input type="hidden" name="get" id="get" value="{$_GET['get']}" />
+        <input type="hidden" name="re" id="re" value="{$_GET['re']}" />
+        <input type="hidden" name="type" id="type" value="{$_GET['type']}" />
+        玩家编号：
+        <input type="text" name="username" id="username" value="{$_GET['username']}" class='skey w120'/>
+        时间段：{form('time',$this->t['str'],'datas')}
+        <input type="submit" id="button" value="立即搜索" class='button'>
+      </form>
+    </div>
+    <div style="clear:both;"></div>
+  </ul>
+</div>
+<table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+  <thead>
+    <tr>
+      <th align="center">序号</th>
+      <th align="center">流水号</th>
+      <th align="center">抢购金额</th>
+      <th align="center">目前状态</th>
+      <th align="center">抢购会员</th>
+      <th align="center">抢购时间</th>
+    </tr>
+  </thead>
+  <!--{loop $this->paylog $value}-->
+  <tbody>
+    <tr class="trhover">
+      <td align="center">{$value[id]}</td>
+      <td align="center">{$value['orderid']}</td>
+      <td align="center"><span class="red">{$value['total_fee']}</span></td>
+      <td align="center" value="{$value['checked']}" id="paylog_{$value['id']}"> 
+        {echo paycheck($value['checked'],$value['orderid'],$value['id'])}
+        {if $value['checked']=='1'}
+        (<a href="javascript:listTable._toggle('paylog_{$value[id]}','checked','{$value[id]}','确认款项已支付到你的账户');">确认已收</a>)
+        {/if} </td>
+      <td align="left" style="padding-left:10px;">{echo $this->mysql->value($this->pre."user","username","uid=".$value['uid'])}</td>
+      <td align="center">{eval echo formattime($value['addtime'])}</td>
+    </tr>
+  </tbody>
+  <!--{/loop}-->
+</table>
+<div class="blank20"></div>
+<div class="page"><span>{self pagetotal}条记录/{eval echo $_GET['page'] ? $_GET['page'] : 1 }页</span>{self showpage}</div>
+<div class="blank20"></div>
+<!--{/if}-->
+<!--{if $_GET['re']=='chart'}-->
+<div class="headbar clearfix">
+  <ul class="tab">
+    <li {if $_GET['type']==''}class="selected"{/if}><a href="{echo preg_replace('#&type=(\d+)#','',geturl())}">曲线走势图</a></li>
+    <li {if $_GET['type']=='1'}class="selected"{/if}><a href="{echo preg_replace('#&type=(\d+)#','',geturl()).'&type=1'}" >柱状走势图</a></li>
+    <div class="tabright">
+      <form method="get" action="">
+        <input type="hidden" name="mod" id="mod" value="{$_GET['mod']}" />
+        <input type="hidden" name="act" id="act" value="{$_GET['act']}" />
+        <input type="hidden" name="get" id="get" value="{$_GET['get']}" />
+        <input type="hidden" name="re" id="re" value="{$_GET['re']}" />
+        <input type="hidden" name="type" id="type" value="{$_GET['type']}" />
+        时间段：{form('time',$this->t['str'],'datas')}
+        <input type="submit" id="button" value="立即搜索" class='button'>
+      </form>
+    </div>
+    <div style="clear:both;"></div>
+  </ul>
+</div>
+<div id="index_pool">
+  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+      <th align="center">人工抢购</th>
+      <th align="center">在线支付</th>
+      <th align="center">合计抢购</th>
+    </tr>
+    <tr>
+      <td align="center"><span class="red">&yen;{self allmoney['_paymoney']}</span></td>
+      <td align="center"><span class="red">&yen;{self allmoney['paymoney']}</span></td>
+      <td align="center"><span class="red">&yen;{self allmoney['allpaymoney']}</span></td>
+    </tr>
+  </table>
+</div>
+<br />
+<div id="container"></div>
+<script language="javascript"> 
+$(function() {
+   chart('container',"{echo $_GET['type']=='1' ? 'column' : 'line'}",[{self categories}],[{name:'人工抢购',data:[{self _paymoney}]},{name:'金币抢购',data:[{self paymoney}]},{name:'合计抢购',data: [{self allpaymoney}]}]);    
+});
+</script>
+<!--{/if}-->
+<!--{/if}-->
+{template admin_footer}

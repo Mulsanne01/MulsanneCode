@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>{config sitename} - 用户登陆</title>
+<meta name="keywords" content="{self keywords}" />
+<meta name="description" content="{self description}" />
+{template ../common}
+{style {self tempdir}css/login.css}
+{script {self tempdir}js/login.js}
+<script language="javascript">
+var message = '{self message}';
+</script>
+</head>
+<body>
+<table width="1000" border="0" align="center" cellpadding="0" cellspacing="0" background="{self tempdir}images/Top11.jpg">
+  <tr>
+    <td width="369" height="110"><img src="{self tempdir}images/logo_02.png" width="369" height="111" /></td>
+    <td width="631">&nbsp;</td>
+  </tr>
+</table>
+<form name="postform" method="post" id="postform" enctype="multipart/form-data" onsubmit="return checkform()">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="mainbj">
+  <tr>
+    <td height="615" valign="top"><table width="923" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+          <td width="626" height="127" align="left" valign="top">&nbsp;</td>
+          <td width="297" align="left" valign="top">&nbsp;</td>
+        </tr>
+        <tr>
+          <td height="323" align="left" valign="top">&nbsp;</td>
+          <td width="297" align="left" valign="top"><table width="100" border="0" align="left" cellpadding="0" cellspacing="0" class="dingwei1">
+              <tr>
+                <td height="50" colspan="2" align="left"><input name="username" type="text" id="username" class="an1" value="{$_POST['username']}" /></td>
+              </tr>
+              <tr>
+                <td height="50" colspan="2" align="left"><input name="password" type="password" id="password" class="an2" value="{$_POST['password']}"  /></td>
+              </tr>              
+              <tr>
+                <td width="46%" height="50" align="left"><input name="seccode" type="text" id="seccode" class="an3" maxlength="4" /></td>
+                <td width="54%" align="left">{echo config::seccode("class=\"yzmimg\"","width=\"88\" height=\"36\"")}</td>
+              </tr>
+               <tr>
+                <td height="15" colspan="2" align="left"></td>
+              </tr>
+              <tr>
+                <td height="71" colspan="2" style="text-align:right;">{form('submit','','submit','','class=\'an\'')}<br /><br /> <a href="{url member_forgotpassword}">忘记密码？</a> </td>
+              </tr>
+            </table></td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+</form>
+{template ../footer}
+</body>
+</html>

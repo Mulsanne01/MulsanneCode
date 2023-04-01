@@ -1,0 +1,249 @@
+{template member_header}
+<div id="main">
+  
+  <div class="right">
+    <div class="opencard_main">
+      <!--{if $_GET['type']=='order'}-->
+       <!--{if $_GET['id']}-->
+      <div class="xm-box uc-box">
+        <div class="hd">
+          <h3 class="title">订单号：{self order['orderid']}</h3>
+        </div>
+        <div class="bd">
+          <div class="order-delivery-items">
+            <div class="order-delivery-item">
+              <table class="order-delivery-table">
+                <thead>
+                  <tr>
+                    <th class="cell-order-goods">商品信息</th>
+                    <th class="cell-order-total">订单金额</th>
+                    <th class="cell-order-total">折后金额</th>
+                    <th class="cell-order-actions">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <!--{eval $i=0;}-->
+                <!--{loop $this->order['goods'] $val}-->
+                <!--{eval $shop = $this->getgoods(1,"goods_id='".$val['goods_id']."'");}-->
+                  <tr>
+                    <td class="cell-order-goods">
+                        <div class="order-goods-info">{$shop['goods_name']}</div>
+                        <div class="order-goods-price">{$shop['shop_price']}</div>
+                        <div class="order-goods-amount">x {$val['number']}</div>
+                        <div class="order-goods-price">{$val['money']}</div>
+                    </td>
+                    <!--{if $i==0}-->
+                    <td rowspan="{echo count($this->order['goods'])}">{self order['money']}</td>
+                    <td rowspan="{echo count($this->order['goods'])}">{self order['price']}</td>
+                    <td rowspan="{echo count($this->order['goods'])}" class="cell-order-actions">
+                    <span id="check_user_{self order['id']}" price="{self order['price']}">{echo order_check_user($this->order)}</span></td>
+                    <!--{/if}-->
+                  </tr>
+                  <!--{eval $i++;}-->
+                <!--{/loop}-->                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="order-delivery-address clearfix">
+            <div class="order-text-section-l">
+              <h4>收货信息 </h4>
+              <table class="order-text-table">
+                <tr>
+                  <th>你的姓名：</th>
+                  <td>{self order['delivery']['name']}</td>
+                </tr>
+                <tr>
+                  <th>收货地址：</th>
+                  <td>{self order['delivery']['address']}</td>
+                </tr>
+                <tr>
+                  <th>联系电话：</th>
+                  <td>{self order['delivery']['mobile']}</td>
+                </tr>
+              </table>
+            </div>
+            <!--{if $this->order['express']}-->
+            <div style="clear:both;">&nbsp;</div>
+            <div class="order-text-section-l">
+              <h4>发货信息 </h4>
+              <table class="order-text-table">
+                <tr>
+                  <th>发货物流：</th>
+                  <td>{self order['express']}</td>
+                </tr>
+                <tr>
+                  <th>物流单号：</th>
+                  <td>{self order['expressnumber']}</td>
+                </tr>
+                <tr>
+                  <th>发货时间：</th>
+                  <td>{echo formattime($this->order['ftime'])}</td>
+                </tr>
+              </table>
+            </div>
+            <!--{/if}-->
+            <!-- {if $this->order['message']}-->
+            <div style="clear:both;">&nbsp;</div>
+            <div class="order-text-section-l">
+              <h4>退货交流信息</h4>
+              <div style="padding:0 0 0 25px;font-size:12px;line-height:22px;" id="_aq_">{self order['message']}</div>
+            </div>
+            <!--{/if}-->
+          </div>
+        </div>
+      </div>
+       <!--{else}-->
+       <div class="track_title"> 
+        <a href="{echo Purl(memberpre(1)."&type=order")}" class="{echo !$_GET['method'] ? 'menushow' : 'menu'}">全部订单</a> 
+        <a href="{echo Purl(memberpre(1)."&type=order&method=nopay")}" class="{echo $_GET['method']=='nopay' ? 'menushow' : 'menu'}">待付款订单</a> 
+        <a href="{echo Purl(memberpre(1)."&type=order&method=yespay")}" class="{echo $_GET['method']=='yespay' ? 'menushow' : 'menu'}">待发货订单</a> 
+        <a href="{echo Purl(memberpre(1)."&type=order&method=backnow")}" class="{echo $_GET['method']=='backnow' ? 'menushow' : 'menu'}">退款中订单</a> 
+        <a href="{echo Purl(memberpre(1)."&type=order&method=backed")}" class="{echo $_GET['method']=='backed' ? 'menushow' : 'menu'}">已退款订单</a> 
+        <a href="{echo Purl(memberpre(1)."&type=order&method=yessend")}" class="{echo $_GET['method']=='yessend' ? 'menushow' : 'menu'}">已发货订单</a> 
+        <a href="{echo Purl(memberpre(1)."&type=order&method=yesdeal")}" class="{echo $_GET['method']=='yesdeal' ? 'menushow' : 'menu'}">已成交订单</a> 
+       </div>
+       <div class="member_mian">
+        <form method="GET" action="">
+          <input type="hidden" name="mod" id="mod" value="{$_GET['mod']}" />
+          <input type="hidden" name="act" id="act" value="{$_GET['act']}" />
+          <input type="hidden" name="type" id="type" value="{$_GET['type']}" />
+          <input type="hidden" name="typeid" id="typeid" value="{$_GET['typeid']}" />
+          <div class="ex_find">
+            <div class="ex_text">订单编号</div>
+            <div class="log_input_box">
+              <input name="orderid" type="text" class="log_input" value="{$_GET[orderid]}" />
+            </div>
+            <div class="ex_text">查询日期</div>
+            <div class="ex_time_box">{form('time',$this->t['str'],'datas')}</div>
+            <div class="ex_button_box">
+              <input type="submit" id="button" value="查&nbsp;&nbsp;询" class="find_button" />
+            </div>
+          </div>
+        </form>
+        <div class="info_bg">
+          <div class="info_text">查询统计：总共有 <b class="text_red_line">{self pagetotal}</b> 条记录</div>
+        </div>
+        <table class="sheet">
+          <tr>
+            <th>订单编号</th>
+            <th>产品列表(名称，单价，数量，小计)</th>
+            <th>订单总额</th>
+            <th>折后总额</th>
+            <th>订购时间</th>
+            <th>目前状态</th>
+          </tr>
+          <!--{loop $this->order $value}-->
+          <tbody id="remove_{$value['id']}">
+          <tr class="mybg">
+            <td width="12%">{$value['orderid']}</td>
+            <td class="order-delivery-table" style="width:40%">
+              <!--{loop $value['goods'] $val}-->
+              <!--{eval $shop = $this->getgoods(1,"goods_id='".$val['goods_id']."'");}-->
+               <div class="order-goods-info" style="padding-top:0;padding-bottom:0;">{$shop['goods_name']}</div>
+               <div class="order-goods-price" style="padding-top:0;padding-bottom:0;">{$shop['shop_price']}</div>
+               <div class="order-goods-amount" style="padding-top:0;padding-bottom:0;">x {$val['number']}</div>
+               <div class="order-goods-price" style="padding-top:0;padding-bottom:0;">{$val['money']}</div>
+               <div style="clear:both;"></div>
+              <!--{/loop}-->
+            </td>
+            <td width="10%" class="red">&yen;{$value['money']}</td>
+            <td width="10%" class="red">&yen;{$value['price']}</td>
+            <td width="10%">{$value['addtime']}</td>
+            <td width="12%" style="line-height:24px;padding:10px 0;"><span id="check_user_{$value['id']}"  price="{$value['price']}">{echo order_check_user($value)}</span>
+            <br /><a href="{echo Purl("?mod=member&act=goods&type=order&id=".$value['id'])}">订单详情</a></td>
+          </tr>
+          </tbody>
+          <!--{/loop}-->
+        </table>
+        <!--{if !is_array($this->order)}-->
+        <div class="no_info"><span class="no_info_ico"></span>暂无任何记录</div>
+        <!--{/if}-->
+        <!--{if $this->newpage}-->
+        <div class="pages">{self newpage}</div>
+        <!--{/if}-->
+       </div>
+       <!--{/if}-->
+      <!--{/if}-->
+      <!--{if $_GET['type']=='list'}-->
+      <div class="opencards_title">
+        <div class="opencards_title_b">我的会员</div>
+      </div>
+      <div class="member_mian">
+        <div class="info_bg">
+          <div class="info_text">产品统计：总共有 <b class="text_red_line">{self pagetotal}</b> 条记录</div>
+        </div>
+        <form method="post"  name="goodsfrom" id="goodsfrom" action="" onsubmit="return checkform()">
+        <table class="sheet">
+          <tr>
+            <th>产品编号</th>
+            <th>产品名称</th>
+            <th>产品价格</th>
+            <th>享受折扣</th>
+            <th>实际价格</th>
+            <!--<th>剩余库存</th>-->
+            <th>订购数量</th>
+            <th>价格小计</th>
+          </tr>
+          <!--{loop $this->record $value}-->
+          <tr class="mybg">
+            <td>{$value['goods_id']}<input type="hidden" name="goodsid[{$value['goods_id']}]" value="{$value['goods_id']}" ></td>
+            <td>{$value['goods_name']}</td>
+            <td class="red">&yen; {$value['shop_price']}</td>
+            <td>{self member['usergroup'][rebate]}</td>
+            <td class="red">&yen; <span id="_price_{$value[goods_id]}">{echo formatnum($value['shop_price']*$this->member['usergroup'][rebate])}</span></td>
+            <!--<td><span id="stock_{$value[goods_id]}">{$value['stock']}</td>-->
+            <td>
+             <div class="change-goods-num clearfix changeGoodsNum">
+                <a href="javascript:_number(-1,{$value[goods_id]});"><span class="icon-common icon-common-negative"></span></a>
+                <input tyep="text" name="number[{$value['goods_id']}]" value="0" onblur="return _input(this,'{$value[goods_id]}');" class="goods-num" id="number_{$value[goods_id]}">
+                <a href="javascript:_number(1,{$value[goods_id]});"><span class="icon-common icon-common-add"></span></a>
+             </div>
+            </td>
+            <td class="red">&yen; <span id="price_{$value[goods_id]}" class="price_">0.00</span></td>
+          </tr>
+          <!--{/loop}-->
+        </table>
+        <div class="shop-cart-count">
+          <div class="shop-cart-total">
+            <p class="total-price">总计金额：<span><strong id='price'>0.00</strong></span></p>
+          </div>
+        </div>  
+        <div class="xm-box">
+          <div class="hd">
+            <a href="javascript:addtack();" class="btn-dake"><i class="icon-checkout icon-checkout-add"></i>使用新地址</a>
+            <h2 class="title">收货地址<input type="hidden" name='takeid' id="takeid" value=""/></h2>
+            <div style="clear:both;"></div>
+          </div>
+          <div class="bd">
+            <div class="xm-address-list" id="takeList">
+              <!--{loop $this->delivery $value}-->
+              <dl id="remove_{$value['id']}" onClick="settake('{$value['id']}');">
+                <dt><strong class="itemConsignee">{$value['name']}</strong> <span class="itemTel">{$value['mobile']}</span> </dt>
+                <dd>
+                  <p class="itemStreet">{$value['address']} </p>
+                  <span class="icon-common icon-common-del delete" onClick="listTable.memberRemove('{$value['id']}','确定要删除该收货信息?');"></span> 
+                  <span class="icon-common icon-common-edit" onClick="addtack('{$value['id']}');"></span> 
+                </dd>
+              </dl>
+              <!--{/loop}-->
+            </div>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+        {form('shop-cart-btns','现在去结账','submit','','class=\'shop-cart-btns\'')}
+        <div class="shop-cart-btns nobtns">暂不订购了</div>
+       </form>
+        <!--{if !is_array($this->record)}-->
+        <div class="no_info"><span class="no_info_ico"></span>暂无任何记录</div>
+        <!--{/if}-->
+        <!--{if $this->newpage}-->
+        <div class="pages">{self newpage}</div>
+        <!--{/if}-->
+      </div>
+      <!--{/if}-->
+    </div>
+  </div>
+</div>
+</div>
+{template member_footer}

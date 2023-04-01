@@ -1,0 +1,180 @@
+<? if (!defined('ROOT')) exit('Can\'t Access !'); include template('member_header','default/member'); ?>
+<div id="main">
+  <div class="right">
+    <div class="opencard_main opencard_main2">
+      <? if($_GET['type']=='register') { ?>
+      <? if($this->registeruser) { ?>
+      <div class="login_Content">
+        <div class="login_Explain login_Explain_duihao" style="padding-top:30px; padding-left:50px; padding-bottom:25px;">
+          <h2 style="font-size:20px; margin-top:25px;">注册成功，请牢记以下信息！并及时激活账号！</h2>
+        </div>
+        <div class="login_Explain" style="padding-top:0; padding-left:75px; font-size:16px; padding-bottom:25px; color:#00F;">
+          <p style="color:#00F; height:32px;">玩家编号：<?=$this->registeruser['username']?></p>
+          <p style="color:#00F;height:32px">登录密码：<?=$this->registeruser['password']?></p>
+          <p style="color:#00F;height:32px">安全密码：<?=$this->registeruser['repass']?></p>
+        </div>
+        <div class="login_Explain" style="padding-top:0; padding-left:50px; font-size:16px; padding-bottom:75px;">
+          <a href="<?=Purl('?mod=member&act=treeform&type=status&username='.$this->registeruser['username']); ?>" id="opcardbutton" style="line-height:40px; text-align:center">立即去激活</a> <a href="<?=Purl('?mod=member&act=vocational&type=register'); ?>" id="opcardbutton" style="line-height:40px; text-align:center">继续注册</a>
+        </div>
+      </div>
+      <? } else { ?>
+      <div class="opencards_title">
+        <div class="opencards_title_b">注册会员</div>
+        <div class="opencards_title_a">提示：<span class="text_x_12px">*</span> 为必填项目！</div>
+      </div>
+      <div class="order-prompt order-promptbommton"><span></span>玩家编号已经自动生成，并且您可以修改！密码默认为：“zb123456”，安全密码默认为：“zb654321”。</div>
+      <div class="opencard_box" style="padding-left:50px;">
+       <form id="ajaxformbox" name="ajaxformbox" method="post" onsubmit="return checkform();">
+        <div class="opencard_h ">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 玩家编号</div>
+          <div class="opencard_input_box"><input name="username" id="username" class="myinput data" type="text" value="<?=$this->autouser?>" onblur="checkusername()"/> <span onclick="changeusername();" style=" display:block; float:left; width:auto; padding:4px 5px; background:#CCCCCC; margin-left:5px; font-size:12px; margin-top:5px; cursor:pointer;">换一个</span>
+                <input name="mymoney" id="mymoney" type="hidden" value="<?=$this->member['regmoney']?>"/>
+                <input name="inmoney" id="inmoney" type="hidden" value="<?=config::get('inmoney')?>"/>
+                <span class="tips" id="usernametip"></span><div style="clear:both;"></div></div>
+        </div>
+        
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 玩家姓名</div>
+          <div class="opencard_input_box"><input type="text" size="20" value="" class="myinput data" id="truename" name="truename" onblur="checktruename()" />
+                 <span class="tips" id="truenametip"></span></div>
+        </div>
+        
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 手机号码</div>
+          <div class="opencard_input_box">
+          <input type="text" size="20" value="" class="myinput data" id="userphone" name="userphone" onblur="checkuserphone()" />
+                 <span class="tips" id="userphonetip"></span></div>
+        </div>
+        
+        
+        <input name="groupid" id="groupid" type="hidden" value="1"/>       
+        <input name="nowopen" id="nowopen" type="hidden" value="0"/>  
+        <div class="opencard_h ">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 直荐会员</div>
+          <div class="opencard_input_box"><input type="text" size="20" value="<?=$this->member['username']?>" class="myinput data" id="referee" name="referee" onblur="checkreferee()" />
+                 <span class="tips" id="refereetip"></span></div>
+        </div>
+        <div class="opencard_h ">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 登陆密码</div>
+          <div class="opencard_input_box"><input type="text" value="zb123456" name="password" id="password" class="myinput data" onblur="checkpassword()"/>
+                  <span class="tips" id="passwordtip"></span><div style="clear:both;"></div></div>
+        </div>
+        <div class="opencard_h ">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 安全密码</div>
+          <div class="opencard_input_box"><input type="text" value="zb654321" name="_repass" id="_repass" class="myinput data" onblur="checkrepass()"/>
+                 <span class="tips" id="_repasstip"></span><div style="clear:both;"></div></div>
+        </div>
+        <div class="opencard_button_box"><?=config::form('opcardbutton','确认','submit');?></div>
+        </form>
+      </div>
+      <? } ?>
+      <? } ?>
+      <? if($_GET['type']=='customs') { ?>
+      <div class="opencards_title">
+        <div class="opencards_title_b">报单中心</div>
+      </div>
+      <? if($this->member['service']) { ?>
+      <div class="order-prompt order-promptbommton">您好：尊敬的报单中心“<?=$this->member['servicename']?>”，您将会获得店内报单补助。</div>
+      <div class="opencard_box">
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 玩家编号</div>
+          <div class="opencard_input_box"><span class="dis-input"><?=$this->member['username']?></span></div>
+        </div>
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 中心名称</div>
+          <div class="opencard_input_box"><span class="dis-input"><?=$this->member['servicename']?></span></div>
+        </div>
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 所在地区</div>
+          <div class="opencard_input_box"><span class="dis-input"><?=$this->member['serviceaddress']?></span></div>
+        </div>
+      </div>
+      <? } else { ?>
+      <div class="order-prompt order-promptbommton">申请成为报单中心后，你将会获得报单的奖励，申请需要后台管理员审核。</div>
+      <div class="opencard_box">
+        <? if(is_array($this->customs)) { ?>
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 申请玩家</div>
+          <div class="opencard_input_box"><span class="dis-input"><?=$this->member['username']?></span></div>
+        </div>
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 中心名称</div>
+          <div class="opencard_input_box"><span class="dis-input"><?=$this->member['servicename']?></span></div>
+        </div>
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 所在地区</div>
+          <div class="opencard_input_box"><span class="dis-input"><?=$this->member['serviceaddress']?></span></div>
+        </div>
+        <div class="opencard_button_box">已经提交报单中心申请，请等待管理员审核</div>
+        <? } else { ?>
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 申请会员</div>
+          <div class="opencard_input_box"><span class="dis-input"><?=$this->member['username']?></span></div>
+        </div>
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 中心名称</div>
+          <div class="opencard_input_box"><input type="text" size="20" class="myinput" id="name" name="name" onblur="checkname()" />
+                 <span class="tips" id="nametip"></span></div>
+        </div>
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 所在地区</div>
+          <div class="opencard_input_box"><input type="text" size="20" class="myinput" id="address" name="address" onblur="checkaddress()" />
+                 <span class="tips" id="addresstip"></span></div>
+        </div>
+        <div class="opencard_button_box"><?=config::form('opcardbutton','确认','submit','','onclick=\'checkform()\'');?></div>
+        <? } ?>
+      </div>
+      <? } ?>
+      <? } ?>
+      <? if($_GET['type']=='list') { ?>
+      <div class="opencards_title">
+        <div class="opencards_title_b">我的会员</div>
+      </div>
+      <div class="member_mian">
+        <form method="GET" action="">
+          <input type="hidden" name="mod" id="mod" value="<?=$_GET['mod']?>" />
+          <input type="hidden" name="act" id="act" value="<?=$_GET['act']?>" />
+          <input type="hidden" name="type" id="type" value="<?=$_GET['type']?>" />
+          <input type="hidden" name="method" id="method" value="<?=$_GET['method']?>" />
+          <div class="ex_find">
+            <div class="ex_text">注册日期</div>
+            <div class="ex_time_box"><?=config::form('time',$this->time_str,'datas');?></div>
+            <div class="ex_button_box">
+              <input type="submit" id="button" value="查&nbsp;&nbsp;询" class="find_button" />
+            </div>
+          </div>
+        </form>
+        <div class="info_bg">
+          <div class="info_text">查询统计：总共有 <b class="text_red_line"><?=$this->pagetotal?></b> 条记录</div>
+        </div>
+        <table class="sheet">
+          <tr>
+            <th>玩家编号</th>
+            <th>会员级别</th>
+            <th>推荐人数</th>
+            <th>注册时间</th>
+            <th>激活状态</th>
+          </tr>
+          <? if(is_array($this->record)) { foreach($this->record as $value) { ?>          <tbody id="remove_<?=$value['uid']?>">
+          <tr class="mybg">
+            <td><?=$value['username']?></td>
+            <td><?=$value['groupname']?></td>
+            <td><?=$value['renumber']?></td>
+            <td><?=formattime($value['regtime']); ?></td>
+            <td><? if($value['status']) { ?><?=formattime($value['opentime']); } else { ?><a href="<?=Purl('?mod=member&act=treeform&type=status&username='.$value['username']); ?>">激活</a> <span uid="<?=$value['uid']?>" class="nowdelete">删除</span><? } ?></td>
+          </tr>
+          </tbody>
+          <? } } ?>        </table>
+        <? if(!is_array($this->record)) { ?>
+        <div class="no_info"><span class="no_info_ico"></span>暂无任何记录</div>
+        <? } ?>
+        <? if($this->newpage) { ?>
+        <div class="pages"><?=$this->newpage?></div>
+        <? } ?>
+      </div>
+      <? } ?>
+    </div>
+  </div>
+</div>
+</div>
+<? include template('member_footer','default/member'); ?>

@@ -1,0 +1,112 @@
+{template member_header}
+<div id="main">
+  <div class="right" style="padding-top:20px;">
+    <div class="uinfo">
+<ul>
+		            <li>玩家編號：<span>{member username}</span></li>
+		            <li>身份等級：<span>无级初学乍练</span> <a href="#">說明</a></li>
+		            <li>信用指數：<span>★★★★★(五星)</span></li>
+		            <li>激活狀態：<span>{echo $this->member['status'] ? "已经激活" : "暂未激活"}</span></li>
+		            <li>帳號類型：<span>主账号</span></li>
+		            <li>报单中心：<span>是</span></li>
+		            <li>新增帳號：<span class="f16">1</span>個</li>
+		            <li>金幣帳戶：<span class="PriceCss3">{member money}</span></li>
+		            <li>金種子帳戶：<span class="PriceCss3">{member shopmoney}</span></li>
+		            <li></li>
+		            <li></li>
+		        </ul>
+
+    </div>
+    <div class="kuaijie">
+     <div>
+       <div class="index_title">
+         <div class="title_l">快捷导航</div>
+         <div id="biao1" >&nbsp;您的推广链接：<input type="text"  style="width:50%" id="tixing" value="https://yanshi.mzm1688.com/index.php?mod=member&act=vocational&type=register&uid={member username}"> 
+         </div>
+        
+       </div>
+       <div class="daohang">
+        <a href="{echo Purl("?mod=member&act=vocational&type=register")}"><img src="{self tempdir}images/an_1_01.jpg" /></a>
+        <a href="{echo Purl("?mod=member&act=capital&type=list")}"><img src="{self tempdir}images/an_1_02.jpg" /></a>
+        <a href="{echo Purl("?mod=member&act=capital&type=transfer")}"><img src="{self tempdir}images/an_1_03.jpg" /></a>
+        <a href="{echo Purl("?mod=member&act=treeform&type=referee")}"><img src="{self tempdir}images/an_1_05.jpg" /></a>
+        <a href="{echo Purl("?mod=member&act=trading&type=list")}"><img src="{self tempdir}images/an_1_06.jpg" /></a>
+        <a href="{echo Purl("?mod=member&act=trading&type=list&method=record")}"><img src="{self tempdir}images/an_1_07.jpg" /></a>
+        <a href="{echo Purl("?mod=member&act=vocational&type=register")}"><img src="{self tempdir}images/an_1_08.jpg" /></a>
+        <div style="clear:both;"></div>
+       </div>
+      </div>
+      
+      <div>
+       <div class="index_title">
+         <div class="title_l">玩家公告</div>
+         <div class="title_r">&nbsp;</div>
+       </div>
+       <div class="member_mian" style=" padding-bottom:0;">
+        <table class="sheet">
+          <!--{loop $this->record $value}-->
+          <tr class="mybg">
+            <td width="50">{$value['id']}</td>
+            <td class="title"><a href="{$value['url']}">{$value['title']}</a></td>
+            <td>{$value['typename']}</td>
+            <td>{$value['addtime']}</td>
+          </tr>
+          <!--{/loop}-->
+        </table>
+        <!--{if !is_array($this->record)}-->
+        <div class="no_info"><span class="no_info_ico"></span>暂无任何记录</div>
+        <!--{/if}-->
+        <!--{if $this->newpage}-->
+        <div class="pages">{self newpage}</div>
+        <!--{/if}-->
+       </div>
+      </div>
+      
+      
+      <div style="padding-top:10px; width:100%;">
+      <div class="index_title">
+        <div class="title_l">收入数据</div>
+        <div class="title_r">&nbsp;</div>
+      </div>
+      <div class="member_mian" style=" padding-bottom:0;">
+      <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+          <th class="td_line"></th>
+          <th>推荐奖</th>
+          <th>分红奖</th>
+          <th>领导奖</th>
+          <th class="td_line">报单奖</th>
+          <th>合计</th>
+        </tr>
+        <tr>
+          <th class="td_line">今日</th>
+          <td>{self todaymoney['refereemoney']}</td>
+          <td>{self todaymoney['money']}</td>
+          <td>{self todaymoney['leadmoney']}</td>
+          <td class="td_line">{self todaymoney['regmoney']}</td>
+          <td><span class="text_red14px">{self todaymoney['inmoney']}</span></td>
+        </tr>
+        <tr>
+          <th class="td_line">昨天</th>
+          <td>{self yestodaymoney['refereemoney']}</td>
+          <td>{self yestodaymoney['money']}</td>
+          <td>{self yestodaymoney['leadmoney']}</td>
+          <td class="td_line">{self yestodaymoney['regmoney']}</td>
+          <td><span class="text_red14px">{self yestodaymoney['inmoney']}</span></td>
+        </tr>
+        <tr>
+          <th class="td_line">全部</th>
+          <td>{self allmoney['refereemoney']}</td>
+          <td>{self allmoney['money']}</td>
+          <td>{self allmoney['leadmoney']}</td>
+          <td class="td_line">{self allmoney['regmoney']}</td>
+          <td><span class="text_red14px">{self allmoney['inmoney']}</span></td>
+        </tr>
+      </table>
+      </div>
+      </div>
+    </div>
+    <div style="clear:both;"></div>
+  </div>
+</div>
+{template member_footer}

@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>{self newstype['typename']} - {config sitename}</title>
+<meta name="Keywords" content="{config keywords}" />
+<meta name="Description" content="{config description}" />
+{template common}
+{style {self tempdir}css/about.css}
+</head>
+<body>
+{template header}
+<div id="main">
+  <div class="online-qa">
+    <div class="question">
+      <div class="hd">{self newstype['typename']}</div>
+      <div class="bd">
+          <table width="100%" border="0" cellpadding="2" cellspacing="1" align="center">
+            <!--{loop {self news} $value}-->
+            <tr>
+              <td height="32" width="640" style="padding-left:10px;">
+                <a href="{echo Purl("?mod=news&act=show&id=".$value['id'])}">{$value['title']}</a>
+              </td>
+              <td height="32">{echo formattime($value['addtime'],'Y-m-d')}</td>
+            </tr>              
+            <!--{/loop}-->
+          </table>
+      </div>
+    </div>
+    {if $this->newpage}<div class="page">{self newpage}</div>{/if}
+  </div>
+{template right}
+</div>
+<div style="clear:both; height:10px;"></div>
+{template footer} 

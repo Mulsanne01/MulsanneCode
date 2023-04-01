@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>{self newstype['typename']} - {config sitename}</title>
+<meta name="Keywords" content="{config keywords}" />
+<meta name="Description" content="{config description}" />
+{template common}
+{style {self tempdir}css/about.css}
+</head>
+<body>
+{template header}
+<div id="main">
+  <div class="online-qa">
+    <div class="question">
+      <div class="bd">
+      <div class="tit">
+        <h3 align="center">{self news[title]}</h3>
+        <p class="time" align="center">发布于：{echo formattime($this->news['addtime'])} </p>
+        </div>
+        <div class="cont">{self news['content']}</div>
+      </div>
+    </div>
+  </div>
+{template right}
+</div>
+{template footer} 

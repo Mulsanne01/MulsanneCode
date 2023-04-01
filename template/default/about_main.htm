@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+<title>{self about[name]} - {config sitename}</title>
+{template common}
+</head>
+<body>
+{template header}
+<div id="main">
+  <div class="myls-left">
+   <div class="myls-title">
+    <!--{loop $this->about($this->about['typeid']) $key=>$value}-->
+     <a href="{$value['url']}" {if $_GET['id']==$value['id']||$_GET['id']==$value['myurl']}{if $key==0}class="nolink select"{else}class="select"{/if}{/if}>{$value['name']}</a>
+    <!--{/loop}-->
+    </div>
+    <div class="myls-lc">
+      <h3><span class="fl">{self about[name]}</span></h3>
+      <div class="myls-lct">
+        <div class="servdetail">
+        {self about['content']}
+        </div>
+      </div>
+    </div>
+  </div>
+  {template right}
+</div>
+{template footer}
+</body>
+</html>

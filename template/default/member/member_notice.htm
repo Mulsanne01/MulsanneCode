@@ -1,0 +1,68 @@
+{template member_header}
+<div id="main">
+  
+  <div class="right">
+    <div class="opencard_main">
+      <div class="track_title"> 
+        <a href="{echo Purl(memberpre(1))}" class="{echo !$_GET['typeid'] ? 'menushow' : 'menu'}">所有公告</a> 
+        <!--{loop $this->getnewstype(10) $val}-->
+        <a href="{echo Purl(memberpre(1).'&typeid='.$val['id'])}" class="{echo $_GET['typeid']==$val['id'] ? 'menushow' : 'menu'}">{$val['typename']}</a> 
+        <!--{/loop}-->   
+      </div>
+      <!--{if $_GET['type']=='list'}-->
+      <div class="member_mian">
+        <form method="GET" action="">
+          <input type="hidden" name="mod" id="mod" value="{$_GET['mod']}" />
+          <input type="hidden" name="act" id="act" value="{$_GET['act']}" />
+          <input type="hidden" name="type" id="type" value="{$_GET['type']}" />
+          <input type="hidden" name="typeid" id="typeid" value="{$_GET['typeid']}" />
+          <div class="ex_find">
+            <div class="ex_text">查询内容</div>
+            <div class="log_input_box">
+              <input name="content" type="text" class="log_input" value="{$_GET[content]}" />
+            </div>
+            <div class="ex_text">查询日期</div>
+            <div class="ex_time_box">{form('time',$this->t['str'],'datas')}</div>
+            <div class="ex_button_box">
+              <input type="submit" id="button" value="查&nbsp;&nbsp;询" class="find_button" />
+            </div>
+          </div>
+        </form>
+        <div class="info_bg">
+          <div class="info_text">查询统计：总共有 <b class="text_red_line">{self pagetotal}</b> 条记录</div>
+        </div>
+        <table class="sheet">
+          <tr>
+            <th>记录编号</th>
+            <th>公告标题</th>
+            <th>所属分类</th>
+            <th>发布时间</th>
+          </tr>
+          <!--{loop $this->record $value}-->
+          <tr class="mybg">
+            <td width="150">{$value['id']}</td>
+            <td class="title"><a href="{$value['url']}">{$value['title']}</a></td>
+            <td>{$value['typename']}</td>
+            <td>{$value['addtime']}</td>
+          </tr>
+          <!--{/loop}-->
+        </table>
+        <!--{if !is_array($this->record)}-->
+        <div class="no_info"><span class="no_info_ico"></span>暂无任何记录</div>
+        <!--{/if}-->
+        <!--{if $this->newpage}-->
+        <div class="pages">{self newpage}</div>
+        <!--{/if}-->
+      </div>
+      <!--{/if}-->
+      <!--{if $_GET['type']=='show'}-->
+      <div class="article">
+        <h1>{self news[title]}</h1>
+        <p class="time">发布时间：{echo formattime($this->news['addtime'])} </p>
+        <div class="content">{self news['content']}</div>
+      </div>
+      <!--{/if}-->
+  </div>
+</div>
+</div>
+{template member_footer}

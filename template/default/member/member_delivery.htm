@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>收货地址管理</title>
+{template ../common}
+<link href="{self tempdir}css/style.css" rel="stylesheet" type="text/css" />
+{script {self tempdir}js/delivery.js}
+</head>
+<body>
+<div class="bankcard">
+<form id="subform" name="subform" method="post" action="" onsubmit="return checkform()">
+  <table class="lotab">
+    <tr>
+      <th>真实姓名：</th>
+      <td><input type="text" size="20" value="{self add[name]}" class="myinput" id="name" name="name" onblur="checkname();"/>
+      <span class="tips" id="nametip"></span></td>
+    </tr>
+    <tr>
+      <th>详细地址：</th>
+      <td><input name="address" id="address" class="myinput" type="text" value="{self add['address']}" onblur="checkaddress();" />
+       <span class="tips" id="addresstip"></span>
+      </td>
+    </tr>
+    <tr>
+      <th>手机号码：</th>
+      <td><input name="mobile" id="mobile" class="myinput" type="text" value="{self add['mobile']}" onblur="checkmobile();"/>
+      <span class="tips" id="mobiletip"></span>
+      </td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>{form('opcardbutton','确认','submit','','style=\'margin-left:0\'')}</td>
+    </tr>
+  </table>
+</form>
+</div>
+</body>
+</html>

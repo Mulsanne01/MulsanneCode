@@ -1,0 +1,218 @@
+{template admin_header}
+<!--{if $_GET['get']=='goods'}-->
+<!--{if $_GET['re']=='list'}-->
+<table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+  <thead>
+    <tr>
+      <th align="center">产品编号</th>
+      <th align="left" style="padding-left:15px; text-align:left">产品名称</th>
+      <th align="center">销售价格</th>
+      <th align="center">奖励差额</th>
+      <th align="center">剩余库存</th>
+      <th align="center">总销售量</th>
+      <th align="center">是否上架</th>
+      <th align="center">操作</th>
+    </tr>
+  </thead>
+  <!--{loop {self goodslist} $value}-->
+  <tbody id="remove_{$value['goods_id']}">
+    <tr class="trhover">
+      <td align="center">{$value['goods_id']}</td>
+      <td align="left" style="padding-left:15px;">{$value['goods_name']}</td>
+      <td align="center">￥{$value['shop_price']}</td>
+      <td align="center">￥{$value['margin']}</td>
+      <td align="center">{$value['stock']}</td>
+      <td align="center">{$value['sale']}</td>
+      <td align="center"><img onclick="listTable.toggle(this,'ischeck','{$value['goods_id']}');" src="{self tempdir}images/{echo usercheck($value['ischeck'])}" /></td>
+      <td align="center">
+       <a href="{$value['editurl']}"><img src="{self tempdir}images/icon_edit.gif"/></a> 
+       {form($value['goods_id'],'确认要删除该产品吗','remove')}
+      </td>
+    </tr>
+  </tbody>
+  <!--{/loop}-->
+</table>
+<div class="blank20"></div>
+<div class="page"><span>{self pagetotal}条记录/{eval echo $_GET['page'] ? $_GET['page'] : 1 }页</span>{self showpage}</div>
+<div class="blank20"></div>
+<!--{/if}-->
+<!--{if $_GET['re']=='add'||$_GET['re']=='edit'}-->
+<script language="javascript">
+var shoptitle = '{self shoptitle}';
+</script>
+<div class="headbar clearfix">
+  <ul class="tab" name="menu1">
+    <li id="li_1" class="selected"><a href="javascript:void(0)" hidefocus="true" onclick="select_tab('1')">产品信息</a></li>
+    <li id="li_2"><a href="javascript:void(0)" hidefocus="true" onclick="select_tab('2')">详细介绍</a></li>
+    <li id="li_3"><a href="javascript:void(0)" hidefocus="true" onclick="select_tab('3')">产品相册</a></li>
+    <div style="clear:both;"></div>
+  </ul>
+</div>
+<form method="post" name="shopform" id="shopform" action="" onsubmit="return shopcheckForm()" enctype="multipart/form-data">
+  <div id="table_box_1">
+    <table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+      <tbody>
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">产品名称</td>
+          <td> {form('goods_name',{self add[goods_name]},'input','','class=\'skey\'')} </td>
+        </tr>
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">销售价格</td>
+          <td> {form('shop_price',{self add[shop_price]},'input','','class=\'skey\' style=\'width:80px;\'')}  </td>
+        </tr>
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">奖励差额</td>
+          <td> {form('margin',{self add[margin]},'input','','class=\'skey\' style=\'width:80px;\'')}  </td>
+        </tr>
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">剩余库存</td>
+          <td> {form('stock',{self add[stock]},'input','','class=\'skey\' style=\'width:80px;\'')} </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="table_box_2" style="display:none">
+    <div style="padding:10px;">{form('goods_desc',{self add[goods_desc]},'editor','0','<1@1>style=\'width:580px;height:340px;\'','goods')}</div>
+  </div>
+  <div id="table_box_3" style="display:none"> <br />
+    <table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+      <tr>
+        <th style="background:none;border:0; text-align:right; width:120px;" align="right";>产品相册：</th>
+        <td style="background:none; border:0;"><input class="middle" name="" type="text" />
+          <div class="upload_btn"><span id="upload"></span></div>
+          <label><span id="upload_tip">该上传为批量上传，每张不超过2MB</span></label></td>
+      </tr>
+    </table>
+    <div id="uploadPic">
+      <ul id="uploadlist" style=" height:90px; overflow:hidden;">
+        <!--{loop $this->add['goods_thumb'] $k=>$v}-->
+        {eval $cover = $k==0 ? "封面" : "&nbsp;";}
+        <li>
+          <div class="displayimg"><img src="{$v}" /></div>
+          <a class="previous" href="javascript:void(0);"></a><span class="front-cover">{$cover}</span><a class="next" href="javascript:void(0);"></a><a class="delete" href="javascript:void(0);"></a>
+          <input type="hidden" name="thumb_list[]" id="thumb_list" value="{$v}" class="thumb_list" />
+        </li>
+        <!--{/loop}-->
+      </ul>
+      <div style="clear:both;"></div>
+    </div>
+  </div>
+  {form('button','提交','submit','','class=\'button\'')}
+</form>
+<script type="text/javascript">
+$(window).load(pageInit);
+function pageInit(){
+  var uploadurl='{url tools_upload}',ext='{self ftype}',size='{self fsize}',count='{self fcount}',useget=0,params={}//默认值
+  ext = ext.match(/([^\(]+?)\s*\(\s*([^\)]+?)\s*\)/i);
+  swfu = new SWFUpload({
+    flash_url : "{config sitepath}app/swfupload/swfupload.swf",
+    prevent_swf_caching : false,//是否缓存SWF文件
+    upload_url: uploadurl, //上传文件
+    file_post_name : "imgFile",
+    post_params:  {'mychatpath':'goods','imgcut':'1'},//随文件上传一同向上传接收程序提交的Post数据
+    use_query_string : false,//是否用GET方式发送参数
+    file_types : ext[2],//文件格式限制
+    file_types_description : ext[1],//文件格式描述
+    file_size_limit : size,	//文件大小限制
+    file_queue_limit:0,//上传队列总数
+    custom_settings : {
+      test : "aaa"
+    },
+    file_queued_handler : fileQueued,//添加成功
+    file_queue_error_handler : fileQueueError,//添加失败
+    file_dialog_complete_handler : fileDialogComplete,
+    upload_start_handler : uploadStart,//上传开始
+    upload_progress_handler : uploadProgress,//上传进度
+    upload_error_handler : uploadError,//上传失败
+    upload_success_handler : uploadSuccess,//上传成功
+    upload_complete_handler : uploadComplete,//上传结束
+    button_placeholder_id : "upload",
+    button_width: 50,
+    button_height: 21,
+    button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+    button_cursor: SWFUpload.CURSOR.HAND,
+    button_text : '浏览...',
+    button_text_style: ".theFont { font-size: 12px; }",
+    button_text_left_padding: 0,
+    button_text_top_padding: 0,
+    debug: false
+  });
+}
+</script>
+<!--{/if}-->   
+<!--{/if}-->
+<!--{if $_GET['get']=='order'}-->
+<!--{if $_GET['re']=='list'}-->
+<div class="headbar clearfix">
+  <ul class="tab" name="menu1">
+    <li{if $_GET['checked']==''} class="selected"{/if}><a href="{echo Purl(adminpre())}">全部记录</a></li>
+    <li{if $_GET['checked']=='1'} class="selected"{/if}><a href="{echo Purl("?mod=admin&act=shop&get=order&checked=1")}" hidefocus="true">待发货</a></li>
+    <li{if $_GET['checked']=='5'} class="selected"{/if}><a href="{echo Purl("?mod=admin&act=shop&get=order&checked=5")}" hidefocus="true">已发货</a></li>
+    <li{if $_GET['checked']=='3'} class="selected"{/if}><a href="{echo Purl("?mod=admin&act=shop&get=order&checked=3")}" hidefocus="true">退款中</a></li>
+    <li{if $_GET['checked']=='4'} class="selected"{/if}><a href="{echo Purl("?mod=admin&act=shop&get=order&checked=4")}" hidefocus="true">已退款</a></li>
+    <li{if $_GET['checked']=='2'} class="selected"{/if}><a href="{echo Purl("?mod=admin&act=shop&get=order&checked=2")}" hidefocus="true">已成交</a></li>
+    <div class="tabright">
+      <form method="get" action="">
+        <input type="hidden" name="mod" id="mod" value="{$_GET['mod']}" />
+        <input type="hidden" name="act" id="act" value="{$_GET['act']}" />
+        <input type="hidden" name="get" id="get" value="{$_GET['get']}" />
+        <input type="hidden" name="re" id="re" value="{$_GET['re']}" />
+        <input type="hidden" name="type" id="type" value="{$_GET['type']}" />
+        订单号：
+        <input type="text" name="orderid" id="orderid" value="{$_GET['orderid']}" class='skey w120'/>
+        时间段：{form('time',$this->t['str'],'datas')}
+        <input type="submit" id="button" value="立即搜索" class='button'>
+      </form>
+    </div>
+    <div style="clear:both;"></div> 
+  </ul>
+</div>
+{form('_express','','select',{self express},'style=\'display:none\'')}
+<!--{loop $this->order $value}-->
+<!--{eval $user = $this->user->sql($value['uid']);
+    $delivery = unserialize($value['delivery']);
+}-->
+<table width="100%" class="cart_table t_c">
+  <thead>
+    <tr>
+      <th align="left" colspan="3" style="text-align:left; font-weight:normal;">&nbsp;&nbsp;订单编号:{$value['orderid']} 会员：{$user['username']} 时间：{echo formattime($value['addtime'])}  收货人：{$delivery['name']} 收货地址：{$delivery['address']} 联系电话：{$delivery['mobile']}</th>
+    </tr>
+  </thead>
+  <tr bgcolor="#FFFFFF">
+    <td width="50%" style="border-right:#CCC 1px solid;"><table width="100%" cellpadding="0" cellspacing="0">
+        <tbody>
+        <!--{eval $goods = unserialize($value['goods']);}-->
+        <!--{loop $goods $val}-->
+        <!--{eval $shop = $this->getgoods(1,"goods_id='".$val['goods_id']."'");}-->
+        <tr>
+          <td style="padding-left:10px;line-height:18px;" width="40%" align="left">{$shop['goods_name']}</td>
+          <td width="15%" align="center">产品单价<br />{$val['shop_price']}</td>
+          <td width="15%" align="center">折扣价格<br />&yen;{$val['price']}</td>
+          <td width="15%" align="center">订购数量<br />{$val['number']}</td>
+          <td width="15%" align="center">产品小计<br />&yen;{$value['price']}</td>
+        </tr>
+        <!--{/loop}-->
+      </table></td>
+    <td width="20%" align="center" style="border-right:#CCC 1px solid;">产品总价：<b style="color:#F30;">&yen;{$value['price']}</b></td>
+    <td width="30%">
+      {echo order_check_admin($value)}
+      <p>
+      <!--{if $value['checked']=='5'}-->
+        {$value['express']}：{$value['expressnumber']}
+      <!--{/if}-->    
+      <!--{if $value['checked']=='3'}-->
+        {$value['message']}
+      <!--{/if}-->  
+      </p>      
+    </td>
+  </tr>
+  </tbody>  
+</table>
+<br />
+<!--{/loop}-->
+<div class="blank20"></div>
+<div class="page"><span>{self pagetotal}条记录/{eval echo $_GET['page'] ? $_GET['page'] : 1 }页</span>{self showpage}</div>
+<div class="blank20"></div>
+<!--{/if}-->
+<!--{/if}-->
+{template admin_footer}

@@ -1,0 +1,21 @@
+{if $this->action!='login'&&$this->manager}
+{template admin_header}
+{else}
+{style {config siteurl}template/admin/images/admin.css}
+<style>
+body{ background:none;}
+</style>
+{/if}
+{style {config siteurl}template/admin/images/message.css}
+<script language="javascript">setTimeout("{self scode};",5000);</script>
+<table cellspacing="1" cellpadding="3" border="1" align="center" class="table">
+  <tbody>
+  <th>{self message}</th>
+  <tr bgcolor="#ffffff">
+    <td class="showmessage"><p class="op"><a href="{self jcode}">确定</a>&nbsp;&nbsp;&nbsp;<a href="javascript:history.back(-1)">返回上一页</a></p></td>
+  </tr>
+  </tbody>  
+</table>
+{if $this->action!='login'}
+{template admin_footer}
+{/if}

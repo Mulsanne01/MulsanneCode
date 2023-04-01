@@ -1,0 +1,489 @@
+{template admin_header}
+<!--{if $_GET['get']=='control'}-->
+<!--{if $_GET['re']=='list'}-->
+<div class="headbar clearfix">
+  <ul class="tab">
+    <li {if $_GET['groupid']==''}class="selected"{/if}><a href="{echo Purl(adminpre())}">全部会员</a></li>
+    <!--{loop $this->getusergoup() $value}-->
+    <!--{eval $class = $_GET['groupid']==$value['groupid'] ? 'class="selected"' : ''}-->
+    <li {$class}><a href="{echo Purl(adminpre().'&groupid='.$value['groupid'])}">{$value['groupname']}</a></li>
+    <!--{/loop}-->
+    <div class="tabright">
+      <form method="get" action="">
+        <input type="hidden" name="mod" id="mod" value="{$_GET['mod']}" />
+        <input type="hidden" name="act" id="act" value="{$_GET['act']}" />
+        <input type="hidden" name="get" id="get" value="{$_GET['get']}" />
+        <input type="hidden" name="re" id="re" value="{$_GET['re']}" />
+        <input type="hidden" name="type" id="type" value="{$_GET['type']}" />
+        玩家编号：
+        <input type="text" name="username" id="username" value="{$_GET['username']}" class='skey w120'/>
+        注册时间：{form('time',$this->t['str'],'datas')}
+        <input type="submit" id="button" value="立即搜索" class='button'>
+      </form>
+    </div>
+    <div style="clear:both;"></div>
+  </ul>
+</div>
+<table border="0" cellspacing="2" cellpadding="4" class="list userlist" id="table" width="100%">
+  <thead>
+    <tr>
+      <th align="left" style="text-align:left;padding-left:10px;">会员信息</th>
+      <th align="left" style="text-align:left;padding-left:10px;">市场信息</th>
+      <th align="left" style="text-align:left;padding-left:10px;">账户资金</th>
+      <th align="center">激活情况</th>
+      <th align="left" style="text-align:left;padding-left:10px;">其他信息</th>
+      <th align="center">操作</th>
+    </tr>
+  </thead>
+  <!--{loop {self userlist} $value}-->
+  <tbody id="remove_{$value['uid']}">
+    <tr class="trhover">
+      <td align="left">
+        <p><em>玩家编号：</em><a href="{echo Purl("?mod=admin&act=user&loginuid=".$value['uid'])}" target="_blank">{$value['username']}</a></p>
+        <p><em>会员头衔：</em>{$value[usergroup]['groupname']}</p>
+        </td>
+      <td align="left">
+        <p><em>推荐会员：</em>{echo $value[referee] ? $value[referee] : '顶层'}</p>
+        <p><em>直推人数：</em>{$value['renumber']}</p>
+        <p><em>账号类型：</em>{echo $value['parentid'] ? '副账号' : '主账号'}</p>
+        <!--{if $value['parentid']}-->
+        <!--{eval $parentuser = $this->user->sql($value['parentid'])}-->
+        <p><em>属主账号：</em>{$parentuser['username']}</p>
+        <!--{/if}-->
+      </td>
+      <td align="left" class="rmb">
+        <p><em>金币：</em><span id="money_{$value['uid']}">{$value['money']}</span> </p>
+        <p><em>金种子：</em><span id="shopmoney_{$value['uid']}">{$value['shopmoney']}</span> </p>
+      </td>
+      <td align="left" class="checkstatus" id="checkstatus_{$value['uid']}">
+        <!--{if $value['status']}-->
+        <p><em>激活时间：</em></p>
+        <p style="padding-left:5px;"><em></em>{echo formattime($value['opentime'])}</p>
+        <!--{else}-->
+        <p align="center"><a href="javascript:listTable.status($('#checkstatus_{$value['uid']}'),'{$value['uid']}','1');">激活会员</a></p>
+        <p align="center"><a href="javascript:listTable.remove('{$value['uid']}','确定要删除该会员吗？');">删除会员</a></p>
+        <!--{/if}-->
+      </td>
+      <td align="left">
+        <p><em>注册时间：</em>{echo formattime($value['regtime'])}</p>
+        <p><em>最后登录：</em>{echo formattime($value['lasttime'])}</p>
+        <p><em>可否登录：</em><img onclick="listTable.toggle(this,'canlogin','{$value['uid']}');" src="{self tempdir}images/{echo usercheck($value[canlogin])}" /></p></td>
+      <td align="center" style="padding:0;">
+      &nbsp;&nbsp;&nbsp;
+      <a href="javascript:getbank({$value['uid']});"><img src="{self tempdir}images/icon_bank.gif" title="提现银行"/></a> 
+      <a href="javascript:;" uid='{$value[uid]}' username="{$value[username]}" money="{$value[money]}" class="changemoney"><img src="{self tempdir}images/icon_account.gif" title="账户变更"/></a>
+      <a href="{echo Purl('?mod=admin&act=user&get=control&re=edit&uid='.$value['uid'])}"><img src="{self tempdir}images/icon_edit.gif" title="编辑"/></a>
+      &nbsp;&nbsp;&nbsp;
+      </td>
+    </tr>
+  </tbody>
+  <!--{/loop}-->
+</table>
+<div class="blank20"></div>
+<div class="page"><span>{self pagetotal}条记录/{echo $_GET['page'] ? $_GET['page'] : 1 }页</span>{self showpage}</div>
+<div class="blank20"></div>
+<!--{/if}-->
+<!--{if $_GET['re']=='edit'}-->
+<form id="editformbox" name="editformbox" method="post" onsubmit="return edituser();">
+  <table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+    <tbody>
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">玩家编号</td>
+        <td>{self u['username']}</td>
+      </tr>
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">玩家姓名</td>
+        <td><input type="text" name="truename" id="truename" value="{self u['truename']}" class="skey skey1" />
+          <span class="tips" id="truenametip"></span></td>
+      </tr>
+      
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">身份证号</td>
+        <td><input type="text" name="idcard" id="idcard" value="{self u['idcard']}" class="skey skey1" onblur="checkidcard()"/>
+          <span class="tips" id="idcardtip"></span></td>
+      </tr>
+      
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">联系地址</td>
+        <td><input type="text" name="address" id="address" value="{self u['address']}" class="skey skey1"/>
+          <span class="tips" id="addresstip"></span></td>
+      </tr>
+      
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">手机号码</td>
+        <td><input type="text" name="userphone" id="userphone" value="{self u['userphone']}" class="skey skey1"/>
+          <span class="tips" id="userphonetip"></span></td>
+      </tr>
+      
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">开户银行</td>
+        <td>{form('bankname',$this->bank['bankname'],'select',formatform(config::get('bankname'),'请选择银行卡开户银行',','),'onchange=\'checkbankname()\'')}
+          <span class="tips" id="banknametip"></span></td>
+      </tr>
+      
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">开户地址</td>
+        <td><input type="text" name="bankadd" id="bankadd" value="{self bank['bankadd']}" class="skey skey1" onblur="checkbankadd()"/>
+          <span class="tips" id="bankaddtip"></span></td>
+      </tr>      
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">银行卡号</td>
+        <td><input type="text" name="bankcard" id="bankcard" value="{self bank['bankcard']}" class="skey skey1" onblur="checkbankcard()"/>
+          <span class="tips" id="bankcardtip"></span></td>
+      </tr><input type="hidden" value="{self bank['id']}" name="bankid" />
+      
+    </tbody>
+  </table>
+{form('button','提交','submit','','class=\'button\'')}
+</form>
+<!--{/if}-->
+<!--{if $_GET['re']=='add'}-->
+<!--{if $this->getmember}-->
+<form id="ajaxformbox" name="ajaxformbox" method="post" onsubmit="return inmember();">
+  <table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+    <tbody>
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">玩家编号</td>
+        <td><input type="text" name="username" id="username" value="" class="skey skey1" onblur="checkusername()"/>
+          <span class="tips" id="usernametip"></span></td>
+      </tr>
+      <input type="hidden" name="groupid" value="1" />
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">登录密码</td>
+        <td><input type="password" name="password" id="password" value="" class="skey skey1" onblur="checkpassword()"/>
+          <span class="tips" id="passwordtip"></span></td>
+      </tr>
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">安全密码</td>
+        <td><input type="password" name="repass" id="repass" value="" class="skey skey1" onblur="checkrepass()"/>
+          <span class="tips" id="repasstip"></span></td>
+      </tr>
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">推荐会员</td>
+        <td><input type="text" name="referee" id="referee" value="" class="skey skey1" onblur="checkreferee()"/>
+          <span class="tips" id="refereetip"></span></td>
+      </tr>
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">激活状态</td>
+        <td> {form('nowopen','','select','[<><请选择...>][<1><现在立马激活会员>][<0><先提交稍后激活>]','style=\'width:162px\' onchange=\'checknowopen()\'')} <span class="tips" id="nowopentip"></span></td>
+      </tr>
+    </tbody>
+  </table>
+{form('button','提交','submit','','class=\'button\'')}
+</form>
+<!--{else}-->
+<form id="ajaxformbox" name="ajaxformbox" method="post" onsubmit="return addmember();">
+  <table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+    <tbody>
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">玩家编号</td>
+        <td><input type="text" name="username" id="username" value="" class="skey skey1" onblur="checkusername()"/>
+          <span class="tips" id="usernametip"></span></td>
+      </tr>
+      <input type="hidden" name="groupid" value="1" />
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">登录密码</td>
+        <td><input type="password" name="password" id="password" value="" class="skey skey1" onblur="checkpassword()"/>
+          <span class="tips" id="passwordtip"></span></td>
+      </tr>
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">安全密码</td>
+        <td><input type="password" name="repass" id="repass" value="" class="skey skey1" onblur="checkrepass()"/>
+          <span class="tips" id="repasstip"></span></td>
+      </tr>
+      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+        <td class="left">激活状态</td>
+        <td> {form('nowopen','','select','[<><请选择...>][<1><现在立马激活会员>][<0><先提交稍后激活>]','style=\'width:162px\' onchange=\'checknowopen()\'')} <span class="tips" id="nowopentip"></span></td>
+      </tr>
+    </tbody>
+  </table>
+{form('button','提交','submit','','class=\'button\'')}
+</form>
+<!--{/if}-->
+<!--{/if}-->
+<!--{if $_GET['re']=='password'}-->
+<form method="post"  name="passwordfrom" id="passwordfrom" action="" onsubmit="return passwordcheckForm()">
+    <table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+      <tbody>
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">玩家编号</td>
+          <td><input type="text" name="username" style="width:150px;" id="username" value="{$_POST[username]}" size="40" class="skey" onfocus='addClass("usernametip","tipser","请输入玩家编号");'/>
+            <span class="tipser" id="usernametip">请输入要重置密码的玩家编号</span></td>
+        </tr>
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">登录密码</td>
+          <td><input type="password" name="password" id="password" value="{$_POST[password]}" class="skey" style="width:150px;" onfocus='addClass("passwordtip","tipser","登录密码，不修改请留空");'/>
+            <span class="tipser" id="passwordtip">登录密码，不修改请留空</span></td>
+        </tr>
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">安全密码</td>
+          <td><input type="password" name="repass" id="repass" value="{$_POST[repass]}" class="skey" style="width:150px;" onfocus='addClass("repasstip","tipser","安全密码，不修改请留空");' />
+            <span class="tipser" id="repasstip">安全密码，不修改请留空</span></td>
+        </tr>
+      </tbody>
+    </table>
+  <div class="blank20"></div>
+  {form('button','提交','submit','','class=\'button\'')}
+</form>
+<script language="javascript">
+var post = '{self repost}';
+var usernametip = '{self usernametip}';
+var passwordtip = '{self passwordtip}';
+var repasstip = '{self repasstip}';
+if(post==1){
+  if(usernametip!=''){
+    addClass("usernametip","tipsno",usernametip);
+  }else{
+    addClass("usernametip","tipsyes","&nbsp;");
+  }
+  if(passwordtip!=''){
+    addClass("passwordtip","tipsno",passwordtip);
+  }else{
+    addClass("passwordtip","tipsyes","&nbsp;");
+  }
+  if(repasstip!=''){
+    addClass("repasstip","tipsno",repasstip);
+  }else{
+    addClass("repasstip","tipsyes","&nbsp;");
+  }
+}
+</script>
+<!--{/if}-->
+<script language="javascript">
+function getbank(uid){
+  Iframe({
+    Title:'会员提现银行',
+    Url:'{echo Purl("?mod=admin&act=profile&get=getbank")}&uid='+uid,
+	Width:420,
+	Height:245,
+	scrolling:'no',
+	isShowIframeTitle:true
+  });
+}
+</script>
+<!--{/if}-->
+<!--{if $_GET['get']=='group'}-->
+<!--{if $_GET['re']=='list'}-->
+<table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+  <thead>
+    <tr>
+      <th align="center">编号</th>
+      <th align="center">级别名称</th>
+      <th align="center">操作</th>
+    </tr>
+  </thead>
+  <!--{loop $this->group $value}-->
+  <tbody>
+    <tr class="trhover">
+      <td align="center">{$value[groupid]}</td>
+      <td align="center">{$value[groupname]}</td>
+      <td align="center">
+      <a href="{echo Purl("?mod=admin&act=user&get=group&re=edit&groupid=".$value['groupid'])}"><img src="{self tempdir}images/icon_edit.gif" title="编辑"/></a> </td>
+    </tr>
+  </tbody>
+  <!--{/loop}-->
+</table>
+<!--{/if}-->
+<!--{if $_GET['re']=='add'||$_GET['re']=='edit'}-->
+<form method="post"  name="groupfrom" id="groupfrom" action="" onsubmit="return groupcheckForm('{self formtitle}','级别')">
+  <div>
+    <table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+      <tbody>
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">级别名称</td>
+          <td>{form('groupname',{self add[groupname]},'input')}</td>
+        </tr>
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">投资金额</td>
+          <td><input type="text" name="buymoney" id="buymoney" value="{self add[buymoney]}" />
+            </td>
+        </tr>
+        
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">副投要求</td>
+          <td><input type="text" name="rebate" id="rebate" value="{self add[rebate]}" /> 金种子</td>
+        </tr>
+        
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">推荐奖励</td>
+          <td><input type="text" name="refereemoney" id="refereemoney" value="{self add[refereemoney]}" /></td>
+        </tr>
+        
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">静态分红</td>
+          <td><input type="text" name="money" id="money" value="{self add[money]}"/></td>
+        </tr>
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">静态封顶</td>
+          <td><input type="text" name="maxmoney" id="maxmoney" value="{self add[maxmoney]}"/></td>
+        </tr>
+
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">扣金种子</td>
+          <td><input type="text" name="shopmoney" id="shopmoney" value="{self add[shopmoney]}"/></td>
+        </tr>
+        
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">报单奖励</td>
+          <td><input type="text" name="regmoney" id="regmoney" value="{self add[regmoney]}"/></td>
+        </tr>
+        
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">领导奖励</td>
+          <td> 奖励：<input type="text" name="leadmoney" id="leadmoney" value="{self add[leadmoney]}" style="width:150px;"/> <br />
+           要求：<input type="text" name="leadask" id="leadask" value="{self add[leadask]}" style="width:220px;"/></td>
+        </tr>
+        
+        
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">金币提现</td>
+          <td >
+            {form('atmmoney',{self add['atmmoney']},'radio','[<1><是>][<0><否>]','onclick=\'changatmmoney(this)\'')}
+           </td>
+        </tr>
+		
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">交易系统</td>
+          <td >
+            {form('trading',{self add['trading']},'radio','[<1><是>][<0><否>]','onclick=\'changtradingmoney(this)\'')}
+           </td>
+        </tr>
+
+        <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+          <td class="left">金币转账</td>
+          <td >
+            {form('transfer',{self add['transfer']},'radio','[<1><是>][<0><否>]','onclick=\'changtransfermoney(this)\'')}
+           </td>
+        </tr>
+
+        <div style="display:none;">
+             <!--{loop $this->right $key=>$val}-->
+            <p style="font-weight:bolder; color:#F00;">{$key}：</p>
+            {form('purviews',{self add[purviews]},'checkbox',formval($val))}
+            <div style="clear:both;"></div>
+            <!--{/loop}-->
+
+        
+        </div>
+
+        
+      </tbody>
+    </table>
+  </div>
+  <div class="blank20"></div>
+  {form('button','提交','submit','','class=\'button\'')}
+</form>
+<script language="javascript">
+function changtradingmoney(obj){
+  if($(obj).val()=='1'){
+	 $("input:checkbox").each(function(){
+	   if($(this).val()=='member_trading_list'||$(this).val()=='member_trading_addorder'){
+		   $(this).attr("checked",true);
+	   }	 
+	 })
+  }else{
+	 $("input:checkbox").each(function(){
+	   if($(this).val()=='member_trading_list'||$(this).val()=='member_trading_addorder'){
+		  $(this).attr("checked",false); 
+	   }	 
+	 }) 
+  }
+}
+function changtransfermoney(obj){
+  if($(obj).val()=='1'){
+	 $("input:checkbox").each(function(){
+	   if($(this).val()=='member_capital_transfer'){
+		   $(this).attr("checked",true);
+	   }	 
+	 })
+  }else{
+	 $("input:checkbox").each(function(){
+	   if($(this).val()=='member_capital_transfer'){
+		  $(this).attr("checked",false); 
+	   }	 
+	 }) 
+  }
+}
+function changatmmoney(obj){
+  if($(obj).val()=='1'){
+	 $("input:checkbox").each(function(){
+	   if($(this).val()=='member_capital_myatm'){
+		   $(this).attr("checked",true);
+	   }	 
+	 })
+  }else{
+	 $("input:checkbox").each(function(){
+	   if($(this).val()=='member_capital_myatm'){
+		  $(this).attr("checked",false); 
+	   }	 
+	 }) 
+  }
+}
+function changgetmoney(obj){
+  if($(obj).val()=='1'){
+	 $("input:checkbox").each(function(){
+	   if($(this).val()=='member_capital_payment'){
+		   $(this).attr("checked",true);
+	   }	 
+	 })
+  }else{
+	 $("input:checkbox").each(function(){
+	   if($(this).val()=='member_capital_payment'){
+		  $(this).attr("checked",false); 
+	   }	 
+	 }) 
+  }
+}
+</script>
+<!--{/if}-->
+<!--{/if}-->
+<!--{if $_GET['get']=='customs'}-->
+<!--{if $_GET['re']=='list'}-->
+<table border="0" cellspacing="1" cellpadding="1"  width="100%">
+  <tbody>
+    <tr bgcolor="#ffffff">
+      <td class="left" width="20">&nbsp;</td>
+      <td><form method="get" action="">
+          <input type="hidden" name="mod" id="mod" value="admin" />
+          <input type="hidden" name="act" id="act" value="user" />
+          <input type="hidden" name="get" id="get" value="customs" />
+          <input type="hidden" name="re" id="re" value="{$_GET['re']}" />
+          用户名：
+          <input type="text" name="username" id="username" value="{$_GET['username']}"  class='skey' style='width:200px;'/>
+          申请时间：{form('time',$this->time_str,'datas','')}
+          <input type="submit" name="button" id="button" value="马上检索" class='button'>
+        </form></td>
+    </tr>
+  </tbody>
+</table>
+<br />
+<table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+  <thead>
+    <tr>
+      <th align="center">序号</th>
+      <th align="center">玩家编号</th>
+      <th align="center">报单中心名称</th>
+      <th align="center">报单中心地址</th>
+      <th align="center">目前状态</th>
+      <th align="center">申请时间</th>
+    </tr>
+  </thead>
+  <!--{loop $this->customs $value}-->
+  <tbody>
+    <tr class="trhover">
+      <td align="center">{$value[id]}</td>
+      <td align="center">{echo $this->mysql->value($this->pre."user","username","uid=".$value['uid'])}</td>
+      <td align="center">{$value['name']}</td>
+      <td align="center">{$value['address']}</td>
+      <td align="center"><img onclick="listTable.toggle(this,'checked','{$value['uid']}');return false;" style="cursor:pointer;" src="{self tempdir}images/{echo usercheck($value[checked])}" /></td>
+      <td align="center">{eval echo formattime($value['addtime'])}</td>
+    </tr>
+  </tbody>
+  <!--{/loop}-->
+</table>
+<div class="blank20"></div>
+<div class="page"><span>{self pagetotal}条记录/{eval echo $_GET['page'] ? $_GET['page'] : 1 }页</span>{self showpage}</div>
+<div class="blank20"></div>
+<!--{/if}-->
+<!--{/if}-->
+{template admin_footer}

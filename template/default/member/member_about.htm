@@ -1,0 +1,17 @@
+{template member_header}
+<div id="main">
+  <div class="right">
+    <div class="opencard_main">
+      <div class="track_title"> 
+        <!--{loop $this->getabout($this->about['typeid']) $val}-->
+        <a href="{$val['memberurl']}" class="{echo $this->about['id']==$val['id'] ? 'menushow' : 'menu'}">{$val['name']}</a> 
+        <!--{/loop}-->   
+      </div>
+      <div class="article">
+        <h1>{self about[name]}</h1>
+        <div class="content">{self about['content']}</div>
+      </div>
+  </div>
+</div>
+</div>
+{template member_footer}

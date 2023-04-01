@@ -1,0 +1,10 @@
+h4.fenlan{
+    padding:0px;font-family:tahoma, arial, 宋体;	
+}
+h4.fenlan div{
+    background-image:url(detail_icon.png);
+	background-color:white;color:#1f1f1f;
+	font-size:12px;
+	height:40px;
+	line-height:26px;
+}

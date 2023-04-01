@@ -1,0 +1,341 @@
+{template member_header}
+<div id="main">
+  <div class="right">
+    <div class="opencard_main opencard_main2">
+    
+    
+      <!--{if $_GET['type']=='safepwd'}-->
+      <div class="opencards_title">
+        <div class="opencards_title_b">设置密保</div>
+        <div class="opencards_title_a">提示：<span class="text_x_12px">*</span> 为必填项目！</div>
+      </div>
+      <!--{if $this->safepwdyes}-->
+      <div class="opencard_box" style="padding-left:50px;">
+       <form id="ajaxformbox" name="ajaxformbox" method="post" onsubmit="return checkform();">
+        
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 安全问题1</div>
+          <div class="opencard_input_box">{form('q1','','select',{self safeq},'onchange=\'checkq1()\'')}
+                 <span class="tips" id="q1tip"></span></div>
+        </div>
+        
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 安全答案1</div>
+          <div class="opencard_input_box"><input type="text" size="20" value="" class="myinput data" id="a1" name="a1" onblur="checka1()" />
+                 <span class="tips" id="a1tip"></span></div>
+        </div>
+        
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 安全问题2</div>
+          <div class="opencard_input_box">{form('q2','','select',{self safeq},'onchange=\'checkq2()\'')}
+                 <span class="tips" id="q2tip"></span></div>
+        </div>
+        
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 安全答案2</div>
+          <div class="opencard_input_box"><input type="text" size="20" value="" class="myinput data" id="a2" name="a2" onblur="checka2()" />
+                 <span class="tips" id="a2tip"></span></div>
+        </div>
+        
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 安全问题3</div>
+          <div class="opencard_input_box">{form('q3','','select',{self safeq},'onchange=\'checkq3()\'')}
+                 <span class="tips" id="q3tip"></span></div>
+        </div>
+        
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 安全答案3</div>
+          <div class="opencard_input_box"><input type="text" size="20" value="" class="myinput data" id="a3" name="a3" onblur="checka3()" />
+                 <span class="tips" id="a3tip"></span></div>
+        </div>
+        
+        <div class="opencard_button_box">{form('opcardbutton','确认','submit')}</div>
+        </form>
+      </div>
+      <!--{else}-->
+     
+      <div class="opencard_box" style="padding-left:50px;">
+       <div class="opencard_h" style="padding-top:20px;">请回答一下问题：<br /></div>
+       <form id="ajaxformbox" name="ajaxformbox" method="post" onsubmit="return checkform2();">
+        
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 安全问题1</div>
+          <div class="opencard_input_box"><span class="dis-input">{self safepwd[0]['question']}</span></div>
+        </div>
+        
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 安全答案1</div>
+          <div class="opencard_input_box"><input type="text" size="20" value="" class="myinput data" id="a1" name="a1" onblur="checka1()" />
+                 <span class="tips" id="a1tip"></span></div>
+        </div>
+        
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 安全问题2</div>
+          <div class="opencard_input_box"><span class="dis-input">{self safepwd[1]['question']}</span></div>
+        </div>
+        
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 安全答案2</div>
+          <div class="opencard_input_box"><input type="text" size="20" value="" class="myinput data" id="a2" name="a2" onblur="checka2()" />
+                 <span class="tips" id="a2tip"></span></div>
+        </div>
+        
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 安全问题3</div>
+          <div class="opencard_input_box"><span class="dis-input">{self safepwd[2]['question']}</span></div>
+        </div>
+        
+        <div class="opencard_h">
+          <div class="opencard_text"><span class="text_x_12px">*</span> 安全答案3</div>
+          <div class="opencard_input_box"><input type="text" size="20" value="" class="myinput data" id="a3" name="a3" onblur="checka3()" />
+                 <span class="tips" id="a3tip"></span></div>
+        </div>
+        
+        <div class="opencard_button_box">{form('opcardbutton','确认','submit')}</div>
+        </form>
+      </div>
+      <!--{/if}-->
+      <!--{/if}-->
+
+    
+      <!--{if $_GET['type']=='profile'}-->
+      <form id="subform" name="subform" method="post" enctype="multipart/form-data" action="">
+        <div class="opencards_title">
+          <div class="opencards_title_b">会员信息</div>
+          <div class="opencards_title_a">提示：<span class="text_x_12px">*</span> 为必填项目！</div>
+        </div>
+        <div class="order-prompt order-promptbommton">请务必确认登录密码与安全密码完全不同！密码相同会导致安全密码失效，使您的帐户资金无法得到安全保障。</div>
+        <div class="opencard_box">
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span>玩家编号</div>
+            <div class="opencard_input_box"><span class="dis-input">{member username}</span></div>
+          </div>
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span> 电子邮箱</div>
+            <div class="opencard_input_box"><span class="dis-input">{member email}</span>
+              <!--{if $this->member[echeck]==1}-->
+              <span class="tips2 emali-ok">邮箱已验证。</span>
+              <!--{else}-->
+              <span class="tips2 emali-no">邮箱未验证。</span> <a class="abut02" href="{echo Purl("?mod=member&act=user&type=authemail")}"><span>去验证&nbsp;&gt;&gt;</span></a>
+              <!--{/if}-->
+            </div>
+          </div>
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span> 手机号码</div>
+            <div class="opencard_input_box"><span class="dis-input">{member userphone}</span>
+              <!--{if $this->member['mcheck']==1}-->
+              <span class="tips2 phone-ok">手机已绑定。</span>
+              <!--{else}-->
+              <span class="tips2 phone-no">手机未绑定。</span> <a class="abut02" href="{echo Purl("?mod=member&act=user&type=authphone")}"><span>去绑定&nbsp;&gt;&gt;</span></a>
+              <!--{/if}-->
+            </div>
+          </div>
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span> 玩家姓名</div>
+            <div class="opencard_input_box">
+              <input name="truename" id="truename" class="myinput data" type="text" value="{member truename}" />
+            </div>
+          </div>
+          <div class="opencard_button_box">{form('opcardbutton','确  定','submit')}</div>
+        </div>
+      </form>
+      <!--{/if}-->
+      <!--{if $_GET['type']=='password'}-->
+      <!--{if $_GET['method']=='paypasswd'}-->
+      <script language="javascript">var paypasswdtip = "支付";</script>
+      <!--{/if}-->
+      <div class="track_title"><a class="{echo $_GET['method']=='' ? 'menushow' : 'menu'}" href="{echo Purl("?mod=member&act=user&type=password")}">修改登陆密码</a><a class="{echo $_GET['method']=='paypasswd' ? 'menushow' : 'menu'}" href="{echo Purl("?mod=member&act=user&type=password&method=paypasswd")}">修改安全密码</a></div>
+      <div class="order-prompt order-promptbommton">请务必确认登录密码与安全密码完全不同！密码相同会导致安全密码失效，使您的帐户资金无法得到安全保障。</div>
+      <!--{if $_GET['method']==''}-->
+      <form action="" method="POST" onsubmit="return checkform()">
+        <div class="opencard_box">
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span> 原始密码</div>
+            <div class="opencard_input_box">
+              <input name="oldpassword" id="oldpassword" class="myinput" type="password" value="" onblur="checkoldpassword()" onfocus="getoldpassword();"/>
+              <span class="tips" id="oldpasswordtip"></span></div>
+          </div>
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span> 新的密码</div>
+            <div class="opencard_input_box">
+              <input name="password" id="password" class="myinput" type="password" onblur="checkpassword()" onfocus="getpassword();" onkeyup="pwStrength(this.value)" />
+              <span class="tips" id="passwordtip"></span>
+              <div class="grade-pwd"> <span>密码强度：</span>
+                <ul>
+                  <li class="block01"></li>
+                  <li class="block02"></li>
+                  <li class="block03"></li>
+                </ul>
+                <span class="grade-text"></span> </div>
+            </div>
+          </div>
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span> 确认密码</div>
+            <div class="opencard_input_box">
+              <input name="cpassword" id="cpassword" class="myinput" type="password"  onblur="checkcpassword()" onfocus="getcpassword();"/>
+              <span class="tips" id="cpasswordtip"></span> </div>
+          </div>
+          <div class="opencard_button_box">{form('opcardbutton','确  定','submit')}</div>
+        </div>
+      </form>
+      <!--{/if}-->
+      <!--{if $_GET['method']=='paypasswd'}-->
+      <form action="" method="POST" onsubmit="return checkform()">
+        <div class="opencard_box">
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span> 原安全密码</div>
+            <div class="opencard_input_box">
+              <input name="oldpassword" id="oldpassword" class="myinput" type="password" value="" onblur="checkoldpassword()" onfocus="getoldpassword();"/>
+              <span class="tips" id="oldpasswordtip"></span></div>
+          </div>
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span> 新安全密码</div>
+            <div class="opencard_input_box">
+              <input name="password" id="password" class="myinput" type="password" onblur="checkpassword()" onfocus="getpassword();" onkeyup="pwStrength(this.value)" />
+              <span class="tips" id="passwordtip"></span>
+              <div class="grade-pwd"> <span>密码强度：</span>
+                <ul>
+                  <li class="block01"></li>
+                  <li class="block02"></li>
+                  <li class="block03"></li>
+                </ul>
+                <span class="grade-text"></span> </div>
+            </div>
+          </div>
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span> 再输入一次</div>
+            <div class="opencard_input_box">
+              <input name="cpassword" id="cpassword" class="myinput" type="password"  onblur="checkcpassword()" onfocus="getcpassword();"/>
+              <span class="tips" id="cpasswordtip"></span> </div>
+          </div>
+          <div class="opencard_button_box">{form('opcardbutton','确  定','submit')}</div>
+        </div>
+      </form>
+      <!--{/if}-->
+      <!--{/if}-->
+      <!--{if $_GET['type']=='authemail'}-->
+      <div class="opencards_title">
+        <div class="opencards_title_b">邮箱验证</div>
+        <div class="opencards_title_a">提示：<span class="text_x_12px">*</span> 为必填项目！</div>
+      </div>
+      <!--{if $this->member['echeck']}-->
+      <div class="order-prompt order-prompt2"><b>已验证邮箱：{member email}</b><em>邮箱验证后，可以用于登录、找回密码、接收资金变动信息等。</em></div>
+      <div class="forgot-emailok">
+        <p>已验证邮箱：<em>{member email}</em>。</p>
+        <span class="text">邮箱验证后，可以用于登录、找回密码、接收资金变动信息等。
+        <a class="abut03" href="javascript:;"><em>解除绑定</em></a>
+        </span> </div>
+      <!--{else}-->
+      <!--{if $this->submit}-->
+      <div class="forgot-step stepshort">
+        <div class="steptext steptextshort"><span class="stepl1"></span>
+          <p>1.验证邮箱</p>
+          <span class="stepr1"></span></div>
+        <div class="steptext steptextshort hover"><span class="stepl2"></span>
+          <p>2.激活邮件</p>
+          <span class="stepr2"></span></div>
+        <div class="steptext steptextshort"><span class="stepl3"></span>
+          <p>3.完成</p>
+          <span class="stepr3"></span></div>
+      </div>
+      <div class="forgot-emailok">
+        <p>已发送验证邮件至：<em>{$_POST['email']}</em>请立即进入邮箱验证。</p>
+        <span class="text">请尽快登录您的邮箱点击激活链接完成验证。</span> <a class="abut03" href="{self emailurl}" target="_blank"><em>去邮箱</em></a>
+        <div class="verify-text"> <b>收不到邮件？</b>
+          <ul>
+            <li>有可能被误判为垃圾邮件了，请到垃圾邮件文件夹找找。</li>
+            <li>拨打客服电话，让客服来帮您解决：{config sitephone}。</li>
+            <li>或者选择<a class="abut02" href="{echo Purl("?mod=member&act=user&type=authemail")}"><span>重发验证邮件</span></a></li>
+          </ul>
+        </div>
+      </div>
+      <!--{else}-->
+      <div class="forgot-step stepshort">
+        <div class="steptext steptextshort hover"><span class="stepl1"></span>
+          <p>1.验证邮箱</p>
+          <span class="stepr1"></span></div>
+        <div class="steptext steptextshort"><span class="stepl2"></span>
+          <p>2.激活邮件</p>
+          <span class="stepr2"></span></div>
+        <div class="steptext steptextshort"><span class="stepl3"></span>
+          <p>3.完成</p>
+          <span class="stepr3"></span></div>
+      </div>
+      <form action="" method="post" onsubmit="return checkform()">
+        <div class="opencard_box">
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span> 验证邮箱</div>
+            <div class="opencard_input_box">
+              <input name="email" id="email" class="myinput" value="{member email}" type="text" onblur="checkemail()" onfocus="getemail();"/>
+              <span class="tips" id="emailtip"></span></div>
+          </div>
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span> 验 证 码</div>
+            <div class="opencard_input_box"><input id="seccode" class="myinput yzm" type="text" name="seccode" value="" placeholder="请输入验证码" maxlength="4" onblur="checkseccode();"/>{echo config::seccode("class=\"yzmimg\"","width=\"80\" height=\"31\"")} <span id="seccodetip" class="tips"></span>
+            </div>
+          </div>
+          <div class="opencard_button_box">{form('opcardbutton','确  定','submit')}</div>
+        </div>
+      </form>
+      <!--{/if}-->
+      <!--{/if}-->
+      <!--{/if}-->
+      <!--{if $_GET['type']=='authphone'}-->
+      <div class="opencards_title">
+        <div class="opencards_title_b">手机绑定</div>
+        <div class="opencards_title_a">提示：<span class="text_x_12px">*</span> 为必填项目！</div>
+      </div>
+      <!--{if $this->member['mcheck']}-->
+      <div class="order-prompt order-prompt2"><b>已绑定手机号：{echo substr($this->member['userphone'],0,3)}****{echo substr($this->member['userphone'],7,4)}</b><em>绑定手机号码后，可以用于登录、找回密码、接收资金变动信息等。</em></div>
+      <h4>修改绑定手机号</h4>
+      <form action="" method="post" onsubmit="return doubleform()">
+        <div class="opencard_box">
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span> 已绑定手机</div>
+            <div class="opencard_input_box"><span class="dis-input">{echo substr($this->member['userphone'],0,3)}****{echo substr($this->member['userphone'],7,4)}</span>
+              <input type="hidden" id="resendtime" name="resendtime" value="{echo 120-(time()-$this->member['mtime'])}"  />
+              <input name="checkcode" id="checkcode" class="myinput yzm" type="text" value="" placeholder="原手机验证码" onblur="checkcheckcode()"/>
+              <span class="tips" id="checkcodetip"></span></div>
+          </div>
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span> 新绑定手机</div>
+            <div class="opencard_input_box"><input name="newphone" id="newphone" class="myinput" type="text" value="" placeholder="请输入新手机号码"/>
+              <input name="phonecode" id="phonecode" class="myinput yzm" type="text" value="" placeholder="新手机验证码" onblur="checkphonecode()"/>
+              <input type="hidden" id="user_mobile_btn" name="user_mobile_btn" value="mobile_btn"  />
+              <span class="tips" id="phonecodetip"></span><span class="tips" id="newphonetip"></span></div>
+          </div>
+          <div class="opencard_button_box">{form('opcardbutton','确  定','submit')}
+              <input class="smsbut" type="button" id="mobile_btn" value="获取验证码"/>
+              <span class="tips" id="mobile_btntip"></span></div>
+        </div>
+      </form>
+      <div class="bound-phone"><b>注意：</b>为了保证您的账户安全，两个不同的验证码会分别发送到您的原绑定手机及新手机号上。如果您的原绑定手机号码无法正常接收短信，请与客服联系（{config sitephone}）</div>
+      <!--{else}-->
+      <div class="order-prompt order-prompt2"><b>您还未绑定手机号</b><em>绑定手机号码后，可以用于登录、找回密码、接收资金变动信息等。</em></div>
+      <h4>绑定手机号</h4>
+      <form action="" method="post" onsubmit="return checkform()">
+        <div class="opencard_box">
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span> 手机号码</div>
+            <div class="opencard_input_box">
+              <input id="userphone" name="userphone" class="myinput ph" type="text" value="{member userphone}" placeholder="请输入手机号码" />
+              <input class="smsbut" type="button" id="bind_mobile_btn" value="获取验证码"  />
+              <input type="hidden" id="resendtime" name="resendtime" value="{echo 120-(time()-$this->member['mtime'])}"  />
+              <input type="hidden" id="user_mobile_btn" name="user_mobile_btn" value="bind_mobile_btn"  />
+              <span class="tips" id="userphonetip"></span></div>
+          </div>
+          <div class="opencard_h">
+            <div class="opencard_text"><span class="text_x_12px">*</span> 验 证 码</div>
+            <div class="opencard_input_box"><input name="checkcode" id="checkcode" class="myinput ph" type="text" value="" onblur="checkcheckcode()" placeholder="手机接收到的验证码" />
+              <span class="tips" id="checkcodetip"></span></span>
+            </div>
+          </div>
+          <div class="opencard_button_box">{form('opcardbutton','确  定','submit')}</div>
+        </div>
+      </form>
+      <!--{/if}-->
+      <!--{/if}-->
+    </div>
+  </div>
+</div>
+{template member_footer}

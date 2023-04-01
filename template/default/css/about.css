@@ -1,0 +1,242 @@
+.online-qa {
+	overflow: hidden;
+	zoom:1;
+	float:left;
+	width:750px;
+}
+.question {
+	border:1px #dbdbdb solid;
+	background:#fff;
+	height:auto!important;
+	height:497px;
+	min-height:497px;
+}
+.question .hd {
+	background:#f8f8f8 url(../images/ico-vod.png) no-repeat 10px 11px;
+	border-bottom: 1px solid #dbdbdb;
+	font-size: 14px;
+	font-family:微软雅黑;
+	height: 38px;
+	line-height: 38px;
+	padding: 0 0 0 30px;
+}
+.question .bd {
+	padding:10px;
+}
+.question .bd h3 {
+	font-size:18px;
+	color:#333333;
+	height:45px;
+	line-height:45px;
+		font-family:'Microsoft Yahei', '\5b8b\4f53';
+}
+.question .bd .time {
+	color:#666666;
+	border-bottom:1px #E4E4E4 solid;
+	padding:5px 0 10px 0;
+}
+.question .bd .cont {
+	line-height:24px;
+	color:#666666;
+	padding:10px 0 0 0;
+}
+.answer {
+	border:1px #b6d18f solid;
+	padding:0 10px;
+	background:#fff;
+	margin:10px 0 0 0;
+}
+.answer .hd {
+	background:url(../images/ico-qa2.png) no-repeat 0 15px;
+	border-bottom: 1px solid #e8e8e8;
+	font-size: 14px;
+	font-family: 微软雅黑;
+	height: 38px;
+	line-height: 38px;
+	padding: 0 0 0 18px;
+}
+.answer .bd {
+	padding:20px;
+}
+.answer .bd .tit {
+	font-size:14px;
+}
+.answer .bd .cont {
+	padding:10px 0;
+	color:#666666;
+	line-height:22px;
+}
+.answer a:hover {
+	text-decoration:none;
+}
+.yhelp {
+}
+.yhelp_hd {
+	background:#F6F6F6;
+	height:30px;
+	overflow:hidden;
+	line-height:30px;
+	padding:0 0 0 10px;
+	margin:15px 0 0 0;
+}
+.yhelp_bd {
+	padding:10px 0 10px 200px;
+	overflow:hidden;
+	zoom:1;
+}
+.BoxStrong, .BoxWeak {
+	float:left;
+	margin-right:45px;
+	text-align:center;
+	width:93px;
+	height:94px;
+	background: url(../images/od_hpj.png) no-repeat 0 0;
+	overflow:hidden;
+}
+.yhelp_bd i {
+	color:#D5231A;
+	font-family:Arial;
+	font-size:36px;
+	font-style:normal;
+	display:block;
+	margin:0 0 5px 0;
+}
+.BoxStrong .advantage {
+	background:url(../images/od_hq.png) no-repeat 0 0;
+	display:inline-block;
+	height:24px;
+	color:#000;
+	font-size:14px;
+	line-height:24px;
+	text-align: left;
+	padding:0 0 0 28px;
+	margin:0 auto;
+}
+.BoxWeak .disadvantage {
+	display:inline-block;
+	height:24px;
+	background: url(../images/od_hr.png) no-repeat 0 0;
+	color:#000;
+	line-height:24px;
+	font-size:14px;
+	text-align: left;
+	padding:0 0 0 28px;
+	margin:0 auto;
+}
+.main-sidebar {
+	width:240px;
+	float: right;
+}
+.main-sidebar .main-box {
+	padding:0 10px;
+	margin-bottom:10px;
+	background:#fff;
+}
+.main-sidebar .main-box .hd {
+	height:32px;
+	line-height:32px;
+	font-size:14px;
+	padding:0 0 0 20px;
+	position:relative;
+	zoom:1;
+	border-bottom:1px #dbdbdb solid;
+	color:#333333;
+	font-family:微软雅黑;
+}
+.main-sidebar .main-box .hd a {
+	position:absolute;
+	right:0;
+	top:0;
+	font-weight:normal;
+	color:#808080;
+	font-family:宋体;
+	font-size:12px;
+}
+.main-sidebar .main-box .bd {
+	padding:5px 0;
+}
+.main-sidebar .main-box .txt-list {
+	line-height:24px;
+	color:#787878;
+	font-family:宋体;
+}
+.main-sidebar .main-box .txt-list a {
+	color:#787878;
+	font-family:Arial, 宋体, sans-serif;
+}
+.main-sidebar .main-box .txt-list a:hover {
+	color:#B90F0D;
+}
+.main-sidebar .letter p {
+	line-height:24px;
+	color:#878787;
+}
+.main-sidebar .letter p span {
+	display:inline-block;
+}
+.main-sidebar .letter p span.l {
+	width:48px;
+}
+.main-sidebar .letter p span.r {
+	width:138px;
+	text-align:right;
+}
+.main-sidebar .letter p span a {
+	color:#515151;
+}
+.main-sidebar .letter p span a:hover {
+	color:#B90F0D;
+}
+.main-sidebar .letter p span em {
+	font-style:normal;
+	color:#B90F0D;
+}
+.main-sidebar .letter .hd {
+	background:url(../images/ico-letter.png) no-repeat 0 11px;
+}
+.main-sidebar .notice .hd {
+	background:url(../images/ico-notice.png) no-repeat 2px 11px;
+}
+.main-sidebar .vodlist .hd {
+	background:url(../images/ico-vod.png) no-repeat 0 9px;
+}
+.main-sidebar .qa .hd {
+	background:url(../images/ico-qa.png) no-repeat 1px 11px;
+}
+.main-sidebar .help-us {
+	border:1px #dbdbdb solid;
+	background:#fff;
+}
+.main-sidebar .help-us .hd {
+	background:#f8f8f8;
+	height:30px;
+	line-height:30px;
+	padding:0 0 0 10px;
+	font-size:14px;
+	border-bottom:1px #dbdbdb solid;
+	font-family:微软雅黑;
+}
+.main-sidebar .help-us .slogan {
+	padding:5px 0 5px 10px;
+	color:#787878;
+}
+.main-sidebar .help-us textarea {
+	background-color:#fff;
+	border: 1px solid #CCCCCC;
+	box-shadow: 1px 1px 2px #E6E6E6 inset;
+	height:70px;
+	width:180px;
+	margin-left:10px;
+	padding:2px;
+}
+.main-sidebar .form-btn {
+	padding:10px 0 10px 10px;
+	border:0 none;
+}
+.main-sidebar .form-btn .btn .cont {
+	padding:0 10px;
+}
+.main-box {
+	border:1px #dbdbdb solid;
+	background:#fff;
+}
